@@ -25,6 +25,9 @@
 #
 name: SONARCLOUD
 
+on:
+  workflow_call:
+
 jobs:
   analyze:
     name: Sonar Check
