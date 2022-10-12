@@ -5,7 +5,7 @@ name: SONARCLOUD
 on:
   workflow_call:
     secret:
-      COMPOSER_ACCESS_TOKEN:
+      GITHUB_TOKEN:
         required: true
       SONAR_TOKEN:
         required: true
