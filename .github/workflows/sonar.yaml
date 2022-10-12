@@ -1,5 +1,28 @@
 # https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs
 
+#
+# Re-usable workflow for sonar checks
+# Required secret variables:
+# Per project:
+# * SONAR_TOKEN : the sonar project token
+#
+#
+# Usage:
+#
+#
+# name: SONAR
+#
+# on:
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+#    types: [opened, synchronize, reopened]
+# jobs:
+#  analyze:
+#    uses: stetind/stem-reusable-workflows/.github/workflows/sonar.yaml@main
+#    secrets: inherit
+#
 name: SONARCLOUD
 
 on:
