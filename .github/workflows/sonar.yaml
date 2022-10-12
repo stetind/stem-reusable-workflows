@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs
 
-name: SONAR
+name: SONARCLOUD
 
 on:
   workflow_call:
