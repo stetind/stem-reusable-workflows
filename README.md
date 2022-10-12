@@ -7,6 +7,9 @@ Reusable workflows with pre-defined GitHub actions.
 Add it directly in a job of your workflow with this syntax:
 
 * CI syntax
+
+* TODO check if we can use the secret.GITHUB_TOKEN instead COMPOSER_ACCESS_TOKEN
+* 
 ```yaml
   job_name:
     uses: stetind/stem-reusable-workflows/.github/workflows/ci.yaml@main
@@ -19,7 +22,7 @@ the repository that calls the reusable workflow.
 * Sonar syntax
 ```yaml
   job_name:
-    uses: stetind/stem-reusable-workflows/.github/workflows/soanr.yaml@main
+    uses: stetind/stem-reusable-workflows/.github/workflows/sonar.yaml@main
     secrets: inherit
 ```
 * Sonar Secret Variable Requirements:
