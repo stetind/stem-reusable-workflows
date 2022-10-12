@@ -4,7 +4,7 @@ name: SONARCLOUD
 
 on:
   workflow_call:
-    secret:
+    secrets:
       GITHUB_TOKEN:
         required: true
       SONAR_TOKEN:
