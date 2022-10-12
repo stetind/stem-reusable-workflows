@@ -4,7 +4,7 @@ name: SONARCLOUD
 
 on:
   workflow_call:
-    secrets: inherit
+#    secrets: inherit
 #      COMPOSER_ACCESS_TOKEN:
 #        required: true
 #      SONAR_TOKEN:
