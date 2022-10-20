@@ -2,9 +2,11 @@ name: SONARCLOUD_MANUAL
 
 on:
   workflow_call:
-    secrets:
+    inputs:
       APPROVER_TEAM:
+        description: 'The name of the team which is able to approve the job'
         required: true
+        type: string
 
 jobs:
   analyze:
@@ -14,7 +16,7 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ secrets.APPROVER_TEAM }}
+          approvers: ${{ env.APPROVER_TEAM }}
       - uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
