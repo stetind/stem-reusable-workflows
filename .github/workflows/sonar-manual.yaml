@@ -2,7 +2,7 @@ name: SONARCLOUD_MANUAL
 
 on:
   workflow_call:
-  secrets:
+    secrets:
       APPROVER_TEAM:
         required: true
 
