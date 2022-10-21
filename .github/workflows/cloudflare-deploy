@@ -1,0 +1,24 @@
+name: Cloudflare_Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Choose an environment to deploy to: <staging|prod>'
+        required: true
+        default: 'staging'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Npm Config
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          cat .npmrc
+      - name: Publish app
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish --env ${{ github.event.inputs.environment }}
