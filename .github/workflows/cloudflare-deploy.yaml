@@ -7,6 +7,7 @@ on:
         description: 'Choose an environment to deploy to: <staging|prod>'
         required: true
         default: 'staging'
+        type: string
 jobs:
   deploy:
     runs-on: ubuntu-latest
