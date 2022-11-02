@@ -157,7 +157,7 @@ jobs:
     steps:
       - name: 📖 Generate documentation
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} #I will only run on the master branch and not on pull request
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        uses: convictional/trigger-workflow-and-wait@v1.6.4
         with:
           owner: stetind
           repo: stem-documentation
