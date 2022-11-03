@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Waiting Aproval
-        uses: trstringer/manual-approval@v1
+        uses: trstringer/manual-approval@v1.6.0
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ppc,stem
+          approvers: ppc
           minimum-approvals: 1
       - name: Checkout
         uses: actions/checkout@v2
