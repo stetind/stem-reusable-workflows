@@ -17,7 +17,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ppc
+          approvers: ppc,stem
           minimum-approvals: 1
       - name: Checkout
         uses: actions/checkout@v2
