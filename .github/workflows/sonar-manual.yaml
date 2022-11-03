@@ -16,7 +16,7 @@ jobs:
       - uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ env.APPROVER_TEAM }}
+          approvers: ${{ github.event.inputs.APPROVER_TEAM }}
       - uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
