@@ -13,10 +13,18 @@ jobs:
     name: Sonar Check
     runs-on: ubuntu-latest
     steps:
-      - name: Waiting Aproval
-        uses: trstringer/manual-approval@v1.6.0
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
         with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Wait for approval
+        uses: trstringer/manual-approval@v1.6.0
+        timeout-minutes: 120
+        with:
+          secret: ${{ steps.generate_token.outputs.token }}
           approvers: ppc
           minimum-approvals: 1
       - name: Checkout
