@@ -2,11 +2,6 @@ name: SONARCLOUD_MANUAL
 
 on:
   workflow_call:
-    inputs:
-      APPROVER_TEAM:
-        description: 'The name of the team which is able to approve the job'
-        required: true
-        type: string
 
 jobs:
   analyze:
@@ -16,9 +11,8 @@ jobs:
       - name: Waiting Aproval
         uses: trstringer/manual-approval@v1
         with:
-          APPROVERS: ppc
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ github.event.inputs.APPROVER_TEAM }}
+          approvers: ppc
           minimum-approvals: 1
       - name: Checkout
         uses: actions/checkout@v2
