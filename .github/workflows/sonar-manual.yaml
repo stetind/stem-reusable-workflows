@@ -16,6 +16,7 @@ jobs:
       - name: Waiting Aproval
         uses: trstringer/manual-approval@v1
         with:
+          APPROVERS: ppc
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: ${{ github.event.inputs.APPROVER_TEAM }}
           minimum-approvals: 1
