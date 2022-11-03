@@ -7,8 +7,14 @@ jobs:
   analyze:
     name: Sonar Check
     runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '>ci')"
     steps:
-      - if: "contains(github.event.head_commit.message, '>ci')"
-        uses: stetind/stem-reusable-workflows/.github/workflows/sonar.yaml@main
-        secrets: inherit
-        
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
