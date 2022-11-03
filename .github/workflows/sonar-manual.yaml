@@ -18,7 +18,7 @@ jobs:
         timeout-minutes: 120
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ github.event.schedule.user.login }}
+          approvers: andreas-kondylis-eli,droll55,geo-sot,gkakosouris,KarinaRashchynskaya,nmemos
           minimum-approvals: 1
       - name: Checkout
         uses: actions/checkout@v2
