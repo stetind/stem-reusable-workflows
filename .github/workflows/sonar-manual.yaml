@@ -18,19 +18,19 @@ jobs:
         with:
           one_of: skip_sonar
           repo_token: ${{ secrets.GITHUB_TOKEN }}  
-      - if: job.steps.check_label.status == failure()
+      - if: steps.check_label.status == 'failure'
         name: Checkout Repository
         uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - if: job.steps.check_label.status == failure()
+      - if: steps.check_label.status == 'failure'
         name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - if: job.steps.check_label.status == success()
+      - if: steps.check_label.status == 'success'
         name: Skip Sonar
         run: echo "::notice::Sonar Skipped"
         
