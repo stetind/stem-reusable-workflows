@@ -16,21 +16,21 @@ jobs:
         name: Check PL labels
         uses: docker://agilepathway/pull-request-label-checker:latest
         with:
-          any_of: skip_sonar
+          none_of: skip_sonar
           repo_token: ${{ secrets.GITHUB_TOKEN }}  
-      - if: steps.check_label.outputs.label_check == 'failure'
+      - if: steps.check_label.outputs.label_check == 'success'
         name: Checkout Repository
         uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - if: steps.check_label.outputs.label_check == 'failure'
+      - if: steps.check_label.outputs.label_check == 'success'
         name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - if: steps.check_label.outputs.label_check == 'success'
+      - if: steps.check_label.outputs.label_check == 'failure'
         name: Skip Sonar
         run: echo "::notice::Sonar Skipped"
         
