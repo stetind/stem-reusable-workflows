@@ -2,11 +2,6 @@ name: Delete Workflows
 
 on:
   workflow_call:
-    secrets:
-      NPM_TOKEN:
-        required: true
-      SONAR_TOKEN:
-        required: true
 
 jobs:
   deleteWorkflow:
