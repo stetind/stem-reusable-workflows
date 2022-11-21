@@ -2,6 +2,11 @@ name: Delete Workflows
 
 on:
   workflow_call:
+    inputs:
+      seconds:
+        type: number
+        default: 1200
+        required: false
 
 jobs:
   deleteWorkflow:
@@ -12,6 +17,6 @@ jobs:
         uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
         with:
           repository: ${{ github.repository }}
-          older-than-seconds: 1200
+          older-than-seconds: ${{ inputs.seconds }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
