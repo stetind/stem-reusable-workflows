@@ -1,0 +1,22 @@
+name: Delete Workflows
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+      SONAR_TOKEN:
+        required: true
+
+jobs:
+  deleteWorkflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deletion
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        with:
+          repository: ${{ github.repository }}
+          older-than-seconds: 1200
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
