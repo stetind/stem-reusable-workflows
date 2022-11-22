@@ -15,8 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Npm Config
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
       - name: Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
