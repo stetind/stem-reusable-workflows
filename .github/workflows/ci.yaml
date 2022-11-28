@@ -100,7 +100,7 @@ jobs:
           key: db
 
       - name: 💩 Run security check
-        uses: symfonycorp/security-checker-action@v3
+        uses: symfonycorp/security-checker-action@v5
         with:
           disable-exit-code: 1
 
