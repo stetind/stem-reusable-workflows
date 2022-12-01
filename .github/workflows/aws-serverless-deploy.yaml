@@ -33,11 +33,17 @@ on:
         required: false
         default: false
         type: boolean
+      dot_env_params:
+        description: 'A comma separated string with the names of the secrets or environment variables which we want to pass to .env'
+        required: false
+        default: ''
+        type: string
 env:
   AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1,
   AWS_SDK_LOAD_CONFIG: 1
   AWS_REGION: ${{ inputs.region }}
   debugMode: ${{ inputs.debug }}
+  DOT_ENV_PARAMS: ${{ inputs.dot_env_params }}
   NODE_ENV: production
 
 jobs:
@@ -62,6 +68,7 @@ jobs:
             NOTIFICATION_CHANNELD_ARN
       
       - name: 📓 Fill [dot] Env (Custom)
+        if: ${{ env.DOT_ENV_PARAMS != '' }}
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
           variableNames: ${{ env.DOT_ENV_PARAMS }}
