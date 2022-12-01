@@ -11,9 +11,6 @@ on:
         required: true
       AWS_ACCESS_KEY_ID:
         required: true
-      DOT_ENV_PARAMS:
-        description: 'A comma sepperated string with all the environment variable names that we want to pass to .env'
-        required: true        
     inputs:
       deploy_environment:
         description: 'Choose an environment to deploy to: <staging|prod>'
@@ -67,7 +64,7 @@ jobs:
       - name: 📓 Fill [dot] Env (Custom)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
-          variableNames: ${{ secrets.DOT_ENV_PARAMS }}
+          variableNames: ${{ env.DOT_ENV_PARAMS }}
 
       - name: 🧙 Install Node 18.x
         uses: actions/setup-node@v3
