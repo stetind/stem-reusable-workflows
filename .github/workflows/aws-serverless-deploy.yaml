@@ -16,18 +16,12 @@ on:
         description: 'Choose an environment to deploy to: <staging|prod>'
         required: true
         default: "staging"
-        type: choice
-        options:
-          - staging
-          - production
+        type: string
       region:
         description: 'Choose the region you want to deploy'
         required: false
         default: 'us-east-1'
-        type: choice
-        options:
-          - us-east-1
-          - us-east-2
+        type: string
       debug:
         description: 'Enable debug?'
         required: false
