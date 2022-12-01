@@ -80,7 +80,7 @@ jobs:
           cp ./.npmrc ~/.npmrc
 
       - name: Install Dependencies
-        run:  npm ci && npm cache clean --force --quite
+        run:  npm install && npm cache clean --force --quite
 
       - name: Install Deployment Dependencies
         run: |
