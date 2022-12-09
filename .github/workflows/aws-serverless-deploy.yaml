@@ -55,7 +55,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: 📓 Fill [dot] Env (Generic)
-        uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
+        uses: CallePuzzle/envvar-to-dotenv-action@v1.1.6
         with:
           variableNames: |
             AWS_ROLE,
@@ -63,7 +63,7 @@ jobs:
       
       - name: 📓 Fill [dot] Env (Custom)
         if: ${{ env.DOT_ENV_PARAMS != '' }}
-        uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
+        uses: CallePuzzle/envvar-to-dotenv-action@v1.1.6
         with:
           variableNames: ${{ env.DOT_ENV_PARAMS }}
 
