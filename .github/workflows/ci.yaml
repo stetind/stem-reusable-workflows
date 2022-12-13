@@ -150,17 +150,17 @@ jobs:
           name: console
           path: tests/Browser/console
 
-#
-#  document:
-#    name: Documentation
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 📖 Generate documentation
-#        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} #I will only run on the master branch and not on pull request
-#        uses: convictional/trigger-workflow-and-wait@v1.6.1
-#        with:
-#          owner: stetind
-#          repo: stem-documentation
-#          github_token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
-#          workflow_file_name: docs.yaml
-#          wait_interval: 5
+
+  document:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📖 Generate documentation
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} #I will only run on the main branch and not on pull request
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: stetind
+          repo: stem-documentation
+          github_token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
+          workflow_file_name: docs.yaml
+          wait_workflow: false
