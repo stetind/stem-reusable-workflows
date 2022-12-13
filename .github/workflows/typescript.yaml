@@ -33,8 +33,8 @@ jobs:
       - uses: sibiraj-s/action-eslint@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
-          eslint-args: '--ignore-path=.gitignore --quiet'
-          extensions: 'js,jsx,ts,tsx'
+          eslint-args: '--ext .ts --ignore-path=.eslintignore --quiet'
+          extensions: 'ts'
           annotations: true
 
   testing:
