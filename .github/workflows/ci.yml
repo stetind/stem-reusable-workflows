@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    uses: stetind/stem-reusable-workflows/.github/workflows/typescript.yaml@main
+    secrets: inherit
