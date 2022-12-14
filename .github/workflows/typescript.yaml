@@ -69,7 +69,7 @@ jobs:
       - name: ✅ Tests (Success) - Create Artifact
         id: artifact_creation
         if: ${{ success() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: code
           path: |
