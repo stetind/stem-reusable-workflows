@@ -8,6 +8,9 @@ on:
       SONAR_TOKEN:
         required: true
 
+env:
+  NODE_VERSION: 16.x
+
 jobs:
   eslint:
     name: Run EsLint
@@ -17,10 +20,11 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
-      - name: 🧙 Install Node 16.x
+      - name: Setup 🔧 - NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: 🔧 Setup Npm
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
@@ -49,7 +53,8 @@ jobs:
       - name: 🧙 Install Node 16.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: 🔧 Setup Npm
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
