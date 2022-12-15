@@ -20,13 +20,13 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
-      - name: Setup 🔧 - NodeJS
+      - name: 🧙 Install Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - name: 🔧 Setup Npm
+      - name: 🔧 Npm Configure
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -34,10 +34,11 @@ jobs:
       - name: 🔧 Install Dependencies
         run: npm ci
 
-      - uses: sibiraj-s/action-eslint@v2
+      - name: 🚀 Run Eslint
+        uses: sibiraj-s/action-eslint@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
-          eslint-args: '--ext .ts --ignore-path=.eslintignore --quiet'
+          eslint-args: '--ignore-path=.eslintignore --quiet'
           extensions: 'ts'
           annotations: true
 
@@ -50,7 +51,7 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
-      - name: 🧙 Install Node 16.x
+      - name: 🧙 Install Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
