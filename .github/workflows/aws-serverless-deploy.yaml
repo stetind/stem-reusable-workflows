@@ -57,7 +57,7 @@ jobs:
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
-          variableNamesByFilter: (*)
+          variableNamesByFilter: *
           
       - name: 🧙 Install Node 18.x
         uses: actions/setup-node@v3
