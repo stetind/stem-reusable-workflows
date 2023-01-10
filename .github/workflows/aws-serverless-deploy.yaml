@@ -57,7 +57,8 @@ jobs:
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
-          variableNames: AWS_ROLE, NOTIFICATION_CHANNELD_ARN, debugMode
+          variableNames: |
+            AWS_ROLE, debugMode
       
       - name: 📓 Fill [dot] Env (Custom)
         if: ${{ env.DOT_ENV_PARAMS != '' }}
