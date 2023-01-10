@@ -57,20 +57,7 @@ jobs:
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
-          variableNames: |
-            AWS_ROLE, debugMode
-      
-      - name: 📓 Fill [dot] Env (Custom)
-        if: ${{ env.DOT_ENV_PARAMS != '' }}
-        uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
-        with:
-          variableNames: ${{ env.DOT_ENV_PARAMS }}
-
-      - name: TEST
-        run: echo ${{github.workspace}}/.env
-        
-      - name: TEST 1
-        run: echo ./.env
+          variableNamesByFilter: "*"
           
       - name: 🧙 Install Node 18.x
         uses: actions/setup-node@v3
