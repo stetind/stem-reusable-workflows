@@ -129,7 +129,7 @@ jobs:
 
       - name: 🔧 Execute Unit Tests
         run: |
-          vendor/bin/testbench --coverage --min=100 --parallel
+          vendor/bin/testbench package:test --coverage --min=100 --parallel
         env:
           APP_URL: http://127.0.0.1:8001
           DUSK_APP_HOST: 127.0.0.1
