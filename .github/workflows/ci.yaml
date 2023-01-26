@@ -129,7 +129,7 @@ jobs:
 
       - name: 🔧 Execute Unit Tests
         run: |
-          vendor/bin/testbench package:test --parallel --coverage-text -vvv
+          vendor/bin/testbench package:test --parallel --coverage -vvv
           vendor/bin/coverage-check build/clover.xml 90
         env:
           APP_URL: http://127.0.0.1:8001
