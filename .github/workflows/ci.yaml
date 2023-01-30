@@ -128,9 +128,7 @@ jobs:
         run: vendor/bin/dusk-updater detect --auto-update
 
       - name: 🔧 Execute Unit Tests
-        run: |
-          vendor/bin/testbench package:test --parallel --coverage -vvv
-          vendor/bin/coverage-check build/clover.xml 90
+        run: vendor/bin/testbench package:test --coverage --min=100 --parallel
         env:
           APP_URL: http://127.0.0.1:8001
           DUSK_APP_HOST: 127.0.0.1
