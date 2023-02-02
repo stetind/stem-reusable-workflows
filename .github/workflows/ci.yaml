@@ -85,6 +85,27 @@ jobs:
       - name: 🔧 Run analyzer
         run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
 
+  arch-test:
+    name: Architecture Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔨 Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: 🚓 Run test
+        run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
+
   security-check:
     name: Vulnerability Check
     runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
