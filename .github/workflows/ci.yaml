@@ -156,7 +156,7 @@ jobs:
           DUSK_DRIVER_URL: http://127.0.0.1:9515
 
       - name: Upload Failed Screenshots
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         if: failure()
         with:
           name: screenshots
@@ -164,7 +164,7 @@ jobs:
 
       - name: Upload Failed Console Logs
         if: failure()
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: console
           path: tests/Browser/console
