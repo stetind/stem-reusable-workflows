@@ -53,20 +53,26 @@ jobs:
         uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
-
-      - name: 🔧 Vars to Environment
-        run: |
-          for i in "${{ vars }}"
-          do
-            echo "{i}={vars[i]}";
-            echo "{i}={vars[i]}" >> $GITHUB_ENV
-          done
           
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
           variableNamesByFilter: ^[A-Za-z].*
+
+      - name: 🔧 Vars to Environment
+        run: |
+          declare -A obj
+          echo '${{ toJSON(vars) }}' > ${{github.workspace}}/.vars_json
           
+          while read -r key value; do
+            obj[$key]=$value
+          done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.vars_json)
+
+          for key in "${!obj[@]}"; do
+            value=${obj[$key]}
+            echo "$key=${obj[$key]}" >> ${{github.workspace}}/.env
+          done
+
       - name: 🧙 Install Node 18.x
         uses: actions/setup-node@v3
         with:
