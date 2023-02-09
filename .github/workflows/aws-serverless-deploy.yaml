@@ -54,6 +54,14 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
+      - name: 🔧 Vars to Environment
+        run: |
+          for i in "${{ vars }}"
+          do
+            echo "{i}={vars[i]}";
+            echo "{i}={vars[i]}" >> $GITHUB_ENV
+          done
+          
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
         with:
