@@ -52,7 +52,7 @@ jobs:
       - name: 🔧 Secret to Environment
         uses: oNaiPs/secrets-to-env-action@v1
         with:
-          secrets: ${{ toJSON({ ...secrets, ...vars}) }}
+          secrets: ${{ toJSON(secrets) }}
 
       - name: 📓 Fill [dot] Env (Generic)
         uses: CallePuzzle/envvar-to-dotenv-action@v1.1.5
