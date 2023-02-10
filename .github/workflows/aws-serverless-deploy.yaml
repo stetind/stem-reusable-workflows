@@ -87,14 +87,11 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ./.npmrc &&
           cp ./.npmrc ~/.npmrc
 
-      - name: Install Dependencies
-        run:  npm install && npm cache clean --force --quite
-
       - name: Install Deployment Dependencies
         run: |
           npm install -g npm@9.1.1 &&
           npm install -g browserslist@4.21.3 &&
-          npm install -g typescript@4.9.3 &&
+          npm install -g typescript@4.9.5 &&
           npm install -g envsub@4.0.7 &&
           npm install -g dotenv@16.0.3 &&
           npm install -g dotenv-cli@6.0.0 &&
@@ -102,11 +99,15 @@ jobs:
           npm install -g webpack-cli@4.10.0 &&
           npm install -g webpack-node-externals@3.0.0 &&
           npm install -g serverless@3.25.1 &&
+          npm install -g @serverless/util@6.8.2 &&
           npm install -g serverless-dotenv-plugin@4.0.2 &&
           npm install -g serverless-plugin-typescript@2.1.4 &&
           npm install -g serverless-webpack@5.11.0 &&
           npm install -g ts-node@10.9.1
-
+      
+      - name: Install Dependencies
+        run:  npm install && npm cache clean --force --quite
+        
       - name: Prepare Deploy
         run: |
           npm run compile-serverless &&
@@ -114,6 +115,7 @@ jobs:
 
       - name: Deploy Serverless
         run: |
+          sls version &&
           sls deploy -s ${{ vars.PPC_STAGE }} -r ${{ inputs.region }} --verbose
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
