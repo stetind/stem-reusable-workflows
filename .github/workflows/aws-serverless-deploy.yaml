@@ -68,6 +68,8 @@ jobs:
             obj[$key]=$value
           done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.vars_json)
 
+          echo '' >> ${{github.workspace}}/.env
+
           for key in "${!obj[@]}"; do
             value=${obj[$key]}
             echo "$key=${obj[$key]}" >> ${{github.workspace}}/.env
