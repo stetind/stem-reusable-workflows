@@ -115,7 +115,7 @@ jobs:
 
       - name: Deploy Serverless
         run: |
-          sls version &&
+          sls -v &&
           sls deploy -s ${{ vars.PPC_STAGE }} -r ${{ inputs.region }} --verbose
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
