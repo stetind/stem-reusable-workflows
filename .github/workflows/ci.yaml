@@ -149,7 +149,7 @@ jobs:
         run: vendor/bin/dusk-updater detect --auto-update
 
       - name: 🔧 Execute Unit Tests
-        run: composer stem:test -p -c
+        run: vendor/bin/testbench package:test --parallel --coverage --min=90
         env:
           APP_URL: http://127.0.0.1:8001
           DUSK_APP_HOST: 127.0.0.1
