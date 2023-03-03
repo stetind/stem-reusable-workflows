@@ -126,13 +126,15 @@ jobs:
           disable-exit-code: 1
 
   code-quality-check:
-    - name: Rector Cache
-      uses: actions/cache@v3
-      with:
-          path: ./var/cache/rector
-
-    - name: Rector Dry Run
-      run: php vendor/bin/rector process --dry-run --config=rector.php
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rector Cache
+        uses: actions/cache@v3
+        with:
+            path: ./var/cache/rector
+      - name: Rector Dry Run
+        run: php vendor/bin/rector process --dry-run --config=rector.php
 
   test:
     name: PHPUnit
