@@ -125,6 +125,13 @@ jobs:
         with:
           disable-exit-code: 1
 
+  code-quality-check:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rector Dry Run
+        run: vendor/bin/rector process --dry-run
+
   test:
     name: PHPUnit
     runs-on: ubuntu-latest
@@ -154,9 +161,6 @@ jobs:
           APP_URL: http://127.0.0.1:8001
           DUSK_APP_HOST: 127.0.0.1
           DUSK_DRIVER_URL: http://127.0.0.1:9515
-
-      - name: Rector Dry Run
-        run: vendor/bin/rector process --dry-run
 
       - name: Upload Failed Screenshots
         uses: actions/upload-artifact@v3.1.2
