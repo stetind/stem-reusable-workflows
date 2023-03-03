@@ -126,7 +126,7 @@ jobs:
           disable-exit-code: 1
 
   code-quality-check:
-    name: PHPUnit
+    name: Code Quality
     runs-on: ubuntu-latest
     steps:
       - name: Rector Cache
