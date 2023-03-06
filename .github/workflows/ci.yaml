@@ -132,7 +132,7 @@ jobs:
       - name: Rector
         uses: actions/checkout@v3
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: ramsey/composer-install@v2
       - name: Rector Dry Run
         run:  vendor/bin/rector process --dry-run --clear-cache
 
