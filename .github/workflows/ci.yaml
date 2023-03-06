@@ -131,8 +131,6 @@ jobs:
     steps:
       - name: Rector
         uses: actions/checkout@v3
-      - name: Validate composer.json and composer.lock
-        run: composer validate
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
       - name: Rector Dry Run
