@@ -11,9 +11,9 @@ env:
 
 jobs:
   duplication-check:
-    if: github.event.pull_request.draft == false
     name: Code duplication check
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
