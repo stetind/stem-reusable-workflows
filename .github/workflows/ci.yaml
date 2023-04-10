@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  pull_request:
+    types: [ 'opened', 'edited', 'reopened', 'synchronize', 'ready_for_review' ]
   workflow_call:
     secrets:
       COMPOSER_ACCESS_TOKEN:
@@ -129,8 +131,7 @@ jobs:
   test:
     name: PHPUnit
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == true
-    timeout-minutes: 1
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
