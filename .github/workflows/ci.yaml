@@ -130,6 +130,7 @@ jobs:
     name: PHPUnit
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == true
+    timeout-minutes: 1
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
