@@ -129,7 +129,7 @@ jobs:
   test:
     name: PHPUnit
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == true
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
