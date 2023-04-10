@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  pull_request:
-    types: [ready_for_review]
   workflow_call:
     secrets:
       COMPOSER_ACCESS_TOKEN:
@@ -13,6 +11,7 @@ env:
 
 jobs:
   duplication-check:
+    if: github.event.pull_request.draft == false
     name: Code duplication check
     runs-on: ubuntu-latest
     steps:
@@ -130,6 +129,7 @@ jobs:
   test:
     name: PHPUnit
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
