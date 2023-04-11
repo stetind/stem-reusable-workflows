@@ -13,6 +13,7 @@ jobs:
   duplication-check:
     name: Code duplication check
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -29,6 +30,7 @@ jobs:
   pint:
     name: Laravel Pint Linting
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -66,6 +68,7 @@ jobs:
   analyze:
     name: PHPStan
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -88,6 +91,7 @@ jobs:
   arch-test:
     name: Architecture Test
     runs-on: ubuntu-latest
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -109,6 +113,7 @@ jobs:
   security-check:
     name: Vulnerability Check
     runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
+    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
