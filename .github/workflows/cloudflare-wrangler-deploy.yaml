@@ -87,12 +87,11 @@ jobs:
           
           filename="wrangler.template.temp"
           
-          prefix='SECRET_'
-          for var_name in $(egrep -ohi "(\$${prefix}([A-Z_0-9]+))" ${filename} | cut -c 2-)
+          for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             echo 'var_name: '${var_name} 
-            echo 'var_name2: '${var_name#"$prefix"} 
-            echo 'value: '$obj[${var_name#"$prefix")}] 
+            echo 'var_name2: '${var_name#SECRET_} 
+            echo 'value: '$obj[${var_name#SECRET_)}] 
           done          
 
 #      - name: 📦 Publish app (without secrets)
