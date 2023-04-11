@@ -85,12 +85,21 @@ jobs:
 
       - name: TEST
         run: |
-            echo '${{ env.SECRETS_PARAMS }}' > ${{github.workspace}}/.secrets_vars_json
-
-            while read -r key value; do
-              echo 'value : '$value
-              echo '----'
-            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)          
+          
+          declare -A obj
+          echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
+          
+          while read -r key value; do
+            obj[$key]=$value
+          done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
+          
+          filename="wrangler.template.temp"
+          
+          for var_name in $(egrep -ohi '(\$((SECRETS)_[A-Z_0-9]+))' ${filename} | cut -c 2-)
+          do
+            echo 'var_name: '${var_name} 
+            echo 'value: '${var_name} 
+          done          
 
 #      - name: 📦 Publish app (without secrets)
 #        if: ${{ env.DOT_ENV_PARAMS == '' }}
