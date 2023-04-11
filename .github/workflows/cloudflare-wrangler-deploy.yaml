@@ -18,10 +18,13 @@ on:
         default: false
         type: boolean
       secrets_variables:
-        description: 'List with all secret variables which we need to wrangler, (as JSON string)'
+        description: 'List with all secret variables which we need to wrangler, (json)'
         required: false
-        default: '[]'
+        default: ''
         type: string
+
+env:
+  SECRETS_PARAMS: ${{ inputs.secrets_variables }}
 
 jobs:
   deploy:
@@ -80,14 +83,21 @@ jobs:
       - name: 🔧 Create wrangler file
         run: cp wrangler.template.temp wrangler.toml
 
-      - name: 📦 Publish app
+      - name: 📦 Publish app (without secrets)
+        if: ${{ env.DOT_ENV_PARAMS == '' }}
         uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish --env ${{ vars.env_environment }}
+
+      - name: 📦 Publish app (with secrets)
+        if: ${{ env.DOT_ENV_PARAMS != '' }}
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           command: publish --env ${{ vars.env_environment }}
           postCommands: |
             echo '${{ vars.secrets_variables }}' > ${{github.workspace}}/.secrets_vars_json
-          
+
             while read -r key value; do
               echo 'value : '$value
               `echo ${{ secrets[$value] }} | wrangler secret put $value`
