@@ -92,6 +92,7 @@ jobs:
 
       - name: 📦 Publish app (with secrets)
         if: ${{ env.DOT_ENV_PARAMS != '' }}
+        uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           command: publish --env ${{ vars.env_environment }}
