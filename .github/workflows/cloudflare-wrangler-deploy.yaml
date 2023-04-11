@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      secrets_variables:
+        description: 'List with all secret variables which we need to wrangler, (as JSON string)'
+        required: false
+        default: '[]'
+        type: string
 
 jobs:
   deploy:
@@ -80,3 +85,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           command: publish --env ${{ vars.env_environment }}
+          postCommands: |
+            echo '${{ vars.secrets_variables }}' > ${{github.workspace}}/.secrets_vars_json
+          
+            while read -r key value; do
+              echo 'value : '$value
+              `echo ${{ secrets[$value] }} | wrangler secret put $value`
+              echo '----'
+            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)
