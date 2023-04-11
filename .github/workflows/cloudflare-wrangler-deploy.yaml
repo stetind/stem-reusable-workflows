@@ -83,24 +83,34 @@ jobs:
       - name: 🔧 Create wrangler file
         run: cp wrangler.template.temp wrangler.toml
 
-      - name: 📦 Publish app (without secrets)
-        if: ${{ env.DOT_ENV_PARAMS == '' }}
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: publish --env ${{ vars.env_environment }}
-
-      - name: 📦 Publish app (with secrets)
-        if: ${{ env.DOT_ENV_PARAMS != '' }}
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: publish --env ${{ vars.env_environment }}
-          postCommands: |
-            echo '${{ vars.secrets_variables }}' > ${{github.workspace}}/.secrets_vars_json
+      - name: TEST
+        run: |
+            echo '${{ env.SECRETS_PARAMS }}' > ${{github.workspace}}/.secrets_vars_json
 
             while read -r key value; do
               echo 'value : '$value
               echo ${{ secrets[${value}] }} | wrangler secret put $value
               echo '----'
-            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)
+            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)          
+
+#      - name: 📦 Publish app (without secrets)
+#        if: ${{ env.DOT_ENV_PARAMS == '' }}
+#        uses: cloudflare/wrangler-action@2.0.0
+#        with:
+#          apiToken: ${{ secrets.CF_API_TOKEN }}
+#          command: publish --env ${{ vars.env_environment }}
+#
+#      - name: 📦 Publish app (with secrets)
+#        if: ${{ env.DOT_ENV_PARAMS != '' }}
+#        uses: cloudflare/wrangler-action@2.0.0
+#        with:
+#          apiToken: ${{ secrets.CF_API_TOKEN }}
+#          command: publish --env ${{ vars.env_environment }}
+#          postCommands: |
+#            echo '${{ env.SECRETS_PARAMS }}' > ${{github.workspace}}/.secrets_vars_json
+#
+#            while read -r key value; do
+#              echo 'value : '$value
+#              echo ${{ secrets[${value}] }} | wrangler secret put $value
+#              echo '----'
+#            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)
