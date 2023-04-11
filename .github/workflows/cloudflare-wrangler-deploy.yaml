@@ -78,11 +78,11 @@ jobs:
       - name: TEST
         run: |
           
-          declare -A obja
+          declare -A obj
           echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
           
           while read -r key value; do
-            obja[$key]=$value
+            obj[$key]=$value
           done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
           
           filename="wrangler.template.temp"
@@ -92,28 +92,27 @@ jobs:
             key=${var_name#SECRET_}
             echo 'var_name: ' ${var_name} 
             echo 'var_name2: ' ${key}
-            echo 'value: ' ${obja[${key}]} 
-            echo 'value2: ' ${obj[${key}]} 
+            echo 'value: ' ${obj[${key}]} 
           done          
 
-#      - name: 📦 Publish app (without secrets)
-#        if: ${{ env.DOT_ENV_PARAMS == '' }}
-#        uses: cloudflare/wrangler-action@2.0.0
-#        with:
-#          apiToken: ${{ secrets.CF_API_TOKEN }}
-#          command: publish --env ${{ vars.env_environment }}
-#
-#      - name: 📦 Publish app (with secrets)
-#        if: ${{ env.DOT_ENV_PARAMS != '' }}
-#        uses: cloudflare/wrangler-action@2.0.0
-#        with:
-#          apiToken: ${{ secrets.CF_API_TOKEN }}
-#          command: publish --env ${{ vars.env_environment }}
-#          postCommands: |
-#            echo '${{ env.SECRETS_PARAMS }}' > ${{github.workspace}}/.secrets_vars_json
-#
-#            while read -r key value; do
-#              echo 'value : '$value
-#              echo ${{ secrets[${value}] }} | wrangler secret put $value
-#              echo '----'
-#            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)
+      - name: 📦 Publish app (without secrets)
+        if: ${{ env.DOT_ENV_PARAMS == '' }}
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish --env ${{ vars.env_environment }}
+          postCommands: |
+            declare -A obj
+            echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
+
+            while read -r key value; do
+              obj[$key]=$value
+            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
+
+            filename="wrangler.template.temp"
+
+            for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
+            do
+              key=${var_name#SECRET_}
+              echo ${obj[${key}]} | wrangler secret put --env ${{ vars.env_environment }} ${key}
+            done
