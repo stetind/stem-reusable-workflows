@@ -17,14 +17,6 @@ on:
         required: false
         default: false
         type: boolean
-      secrets_variables:
-        description: 'List with all secret variables which we need to wrangler, (json)'
-        required: false
-        default: ''
-        type: string
-
-env:
-  SECRETS_PARAMS: ${{ inputs.secrets_variables }}
 
 jobs:
   deploy:
@@ -95,7 +87,7 @@ jobs:
           
           filename="wrangler.template.temp"
           
-          for var_name in $(egrep -ohi '(\$((SECRETS)_[A-Z_0-9]+))' ${filename} | cut -c 2-)
+          for var_name in $(egrep -ohi '(\$((SECRET)_[A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             echo 'var_name: '${var_name} 
             echo 'var_name2: '${var_name#SECRETS} 
