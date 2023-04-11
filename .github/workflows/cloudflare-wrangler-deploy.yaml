@@ -79,7 +79,7 @@ jobs:
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: publish --env ${{ vars.env_environment }}
+          environment: ${{ vars.env_environment }}
           postCommands: |
             declare -A obj
             echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
