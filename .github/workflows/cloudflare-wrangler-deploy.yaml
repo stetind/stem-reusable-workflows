@@ -89,7 +89,7 @@ jobs:
 
             while read -r key value; do
               echo 'value : '$value
-              echo ${{ secrets[${value}] }} | wrangler secret put $value
+              echo ${{ secrets[${value}] }} 
               echo '----'
             done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_vars_json)          
 
