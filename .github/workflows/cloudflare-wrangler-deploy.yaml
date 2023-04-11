@@ -98,7 +98,8 @@ jobs:
           for var_name in $(egrep -ohi '(\$((SECRETS)_[A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             echo 'var_name: '${var_name} 
-            echo 'value: '${var_name} 
+            echo 'var_name2: '${var_name#SECRETS} 
+            echo 'value: '$obj[${var_name}] 
           done          
 
 #      - name: 📦 Publish app (without secrets)
