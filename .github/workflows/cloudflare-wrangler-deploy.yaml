@@ -81,14 +81,13 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
           postCommands: |
-            declare -A obj
-            echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
-            while read -r key value; do
-              obj[$key]=$value
-            done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
-            filename="wrangler.template.temp"
-            for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
+            filename="wrangler.template.temp";
+            for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-);
             do
-              key=${var_name#SECRET_}
-              `echo ${obj[${key}]} | wrangler secret put --env ${{ vars.env_environment }} ${key}`
-            done
+              variableKey=${var_name#SECRET_}
+              while read -r key value; do
+                if $key == $variableKey then;
+                  `echo ${value} | wrangler secret put --env ${{ vars.env_environment }} ${key}`    
+                fi
+              done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json);  
+            done;
