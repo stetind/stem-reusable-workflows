@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      secretVariables:
+        description: 'Enable debug?'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   deploy:
@@ -75,19 +80,28 @@ jobs:
       - name: 🔧 Create wrangler file
         run: cp wrangler.template.temp wrangler.toml
 
+      - name: Prepare Secret Variables
+        run: |
+          declare -A obj
+
+          while read -r key value; do
+            obj[$key]=$value
+          done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
+
+          filename="wrangler.toml"
+
+          for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
+          do
+            key=${var_name#SECRET_}
+            echo 'var_name: ' ${var_name} 
+            echo 'var_name2: ' ${key}
+            echo 'value: ' ${obj[${key}]}
+            echo "${key}=${obj[${key}]}" >> $GITHUB_ENV 
+          done          
+
       - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
-          postCommands: |
-            filename="wrangler.template.temp";
-            for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-);
-            do
-              variableKey=${var_name#SECRET_}
-              while read -r key value; do
-                if $key == $variableKey then;
-                  `echo ${value} | wrangler secret put --env ${{ vars.env_environment }} ${key}`    
-                fi
-              done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json);  
-            done;
+          secrets: ${{ inputs.secretVariables }}
