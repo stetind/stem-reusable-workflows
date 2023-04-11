@@ -78,11 +78,11 @@ jobs:
       - name: TEST
         run: |
           
-          declare -A obj
+          declare -A obja
           echo '${{ toJSON(secrets) }}' > ${{github.workspace}}/.secrets_json
           
           while read -r key value; do
-            obj[$key]=$value
+            obja[$key]=$value
           done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
           
           filename="wrangler.template.temp"
@@ -92,7 +92,8 @@ jobs:
             key=${var_name#SECRET_}
             echo 'var_name: ' ${var_name} 
             echo 'var_name2: ' ${key}
-            echo 'value: ' ${obj[${key}]} 
+            echo 'value: ' ${obja[${key}]} 
+            echo 'value2: ' ${obj[${key}]} 
           done          
 
 #      - name: 📦 Publish app (without secrets)
