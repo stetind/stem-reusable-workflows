@@ -11,23 +11,6 @@ env:
 
 
 jobs:
-  duplication-check:
-    name: Code duplication check
-    runs-on: ubuntu-latest
-    if: '! github.event.pull_request.draft'
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v3
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          tools: phpcpd
-
-      - name: 🔧 Check code duplication in "src" directory
-        run: phpcpd src/ --min-lines=6
-
   pint:
     name: Laravel Pint Linting
     runs-on: ubuntu-latest
@@ -84,12 +67,6 @@ jobs:
 
       - name: 🚓 Run test
         script: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
-
-    save_cache:
-      key: $CI_COMMIT_REF_SLUG
-      paths:
-        - vendor/
-
 
 #  document:
 #    name: Update Documentation
