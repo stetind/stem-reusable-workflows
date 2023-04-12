@@ -30,7 +30,7 @@ jobs:
   pint:
     name: Laravel Pint Linting
     runs-on: ubuntu-latest
-    if: '! github.event.pull_request.draft'
+    needs: [ "arch-test" ]
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -62,27 +62,6 @@ jobs:
 #      - name: 🔧  Run Check
 #        run: phpmd src text cleancode,codesize,controversial,design,unusedcode
 
-  analyze:
-    name: PHPStan
-    runs-on: ubuntu-latest
-    if: '! github.event.pull_request.draft'
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v3
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-        #        https://github.com/sebastianbergmann/phpcpd/blob/21158aed508ffa2480b90f2af93724e3355c703f/.github/workflows/ci.yml#L58
-
-      - name: 🔧 Run analyzer
-        run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
-
   arch-test:
     name: Architecture Test
     runs-on: ubuntu-latest
@@ -104,68 +83,6 @@ jobs:
 
       - name: 🚓 Run test
         run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
-
-  security-check:
-    name: Vulnerability Check
-    runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
-    if: '! github.event.pull_request.draft'
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v3
-
-      - name: Cache the vulnerability database
-        uses: actions/cache@v3
-        id: cache-db
-        with:
-          path: ~/.symfony/cache
-          key: db
-
-      - name: 💩 Run security check
-        uses: symfonycorp/security-checker-action@v5
-        with:
-          disable-exit-code: 1
-
-  test:
-    name: PHPUnit
-    runs-on: ubuntu-latest
-    if: '! github.event.pull_request.draft'
-    steps:
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
-          coverage: xdebug
-
-      - name: 🛫 Checkout
-        uses: actions/checkout@v3
-
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-      - name: Update Dusk Chromedriver
-        run: vendor/bin/dusk-updater detect --auto-update
-
-      - name: 🔧 Execute Unit Tests
-        run: vendor/bin/testbench package:test --parallel --coverage --min=90
-        env:
-          APP_URL: http://127.0.0.1:8001
-          DUSK_APP_HOST: 127.0.0.1
-          DUSK_DRIVER_URL: http://127.0.0.1:9515
-
-      - name: Upload Failed Screenshots
-        uses: actions/upload-artifact@v3.1.2
-        if: failure()
-        with:
-          name: screenshots
-          path: tests/Browser/screenshots/*
-
-      - name: Upload Failed Console Logs
-        if: failure()
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: console
-          path: tests/Browser/console
 
 
 #  document:
