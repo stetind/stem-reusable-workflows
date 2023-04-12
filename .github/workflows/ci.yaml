@@ -9,17 +9,6 @@ on:
 env:
   PHP_VERSION: 8.1
 
-#Cache libraries in between jobs
-cache:
-  key: $CI_COMMIT_REF_SLUG
-  paths:
-    - vendor/
-
-before_script:
-  # Install and run Composer
-   name: 🧙 Install Dependencies
-   uses: ramsey/composer-install@v2
-
 
 jobs:
   duplication-check:
@@ -54,6 +43,9 @@ jobs:
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - restore_cache:
+          key: $CI_COMMIT_REF_SLUG
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -90,8 +82,16 @@ jobs:
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+
+      - save_cache:
+          key: $CI_COMMIT_REF_SLUG
+          paths:
+            - vendor/
+
       - name: 🚓 Run test
-        run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
+        script: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
 
 
 #  document:
