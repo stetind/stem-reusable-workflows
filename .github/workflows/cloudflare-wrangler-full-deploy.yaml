@@ -24,16 +24,14 @@ on:
         type: string
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Code analyze
-        uses: stetind/stem-reusable-workflows/.github/workflows/typescript.yaml@main
+  analysis:
+    uses: stetind/stem-reusable-workflows/.github/workflows/typescript.yaml@main
 
-      - name: Deploy
-        if: ${{ success() }}
-        uses: stetind/stem-reusable-workflows/.github/workflows/cloudflare-wrangler-deploy.yaml@main
-        with:
-          deploy_environment: ${{ inputs.deploy_environment }}
-          debug: ${{ inputs.debug }}
-          secretVariables: ${{ inputs.secretVariables }}
+  deploy:
+    needs: analysis
+    if: ${{ jobs.analysis.outcome == 'success' }}
+    uses: stetind/stem-reusable-workflows/.github/workflows/cloudflare-wrangler-deploy.yaml@main
+    with:
+      deploy_environment: ${{ inputs.deploy_environment }}
+      debug: ${{ inputs.debug }}
+      secretVariables: ${{ inputs.secretVariables }}
