@@ -44,9 +44,6 @@ jobs:
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
-      - restore_cache:
-          key: $CI_COMMIT_REF_SLUG
-
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
 
@@ -85,13 +82,13 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
 
-      - save_cache:
-          key: $CI_COMMIT_REF_SLUG
-          paths:
-            - vendor/
-
       - name: 🚓 Run test
         script: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
+
+    save_cache:
+      key: $CI_COMMIT_REF_SLUG
+      paths:
+        - vendor/
 
 
 #  document:
