@@ -24,18 +24,14 @@ on:
         type: string
 
 jobs:
-  analysis:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Code analyze
         uses: stetind/stem-reusable-workflows/.github/workflows/typescript.yaml@main
 
-  deploy:
-    needs: analysis
-    runs-on: ubuntu-latest
-    if: ${{ jobs.analysis.outcome == 'success' }}
-    steps:
-      - name: Production Deploy
+      - name: Deploy
+        if: ${{ success() }}
         uses: stetind/stem-reusable-workflows/.github/workflows/cloudflare-wrangler-deploy.yaml@main
         with:
           deploy_environment: ${{ inputs.deploy_environment }}
