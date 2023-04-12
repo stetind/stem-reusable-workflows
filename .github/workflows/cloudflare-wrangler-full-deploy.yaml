@@ -9,7 +9,7 @@ on:
         required: true
     inputs:
       deploy_environment:
-        description: 'Choose an environment to deploy to'
+        description: 'Choose an environment'
         required: true
         type: string
       debug:
