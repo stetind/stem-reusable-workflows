@@ -26,10 +26,12 @@ on:
 jobs:
   analysis:
     uses: stetind/stem-reusable-workflows/.github/workflows/typescript.yaml@main
+    secrets: inherit
 
   deploy:
     needs: analysis
     uses: stetind/stem-reusable-workflows/.github/workflows/cloudflare-wrangler-deploy.yaml@main
+    secrets: inherit
     with:
       deploy_environment: ${{ inputs.deploy_environment }}
       debug: ${{ inputs.debug }}
