@@ -29,7 +29,6 @@ jobs:
 
   deploy:
     needs: analysis
-    if: ${{ jobs.analysis.outcome == 'success' }}
     uses: stetind/stem-reusable-workflows/.github/workflows/cloudflare-wrangler-deploy.yaml@main
     with:
       deploy_environment: ${{ inputs.deploy_environment }}
