@@ -78,6 +78,8 @@ jobs:
       - name: Prepare Secret Variables
         run: |
           declare -A obj
+          secret_variable_filename=${{github.workspace}}'/.secrets_variables'
+          touch $secret_variable_filename
           while read -r key value; do
             obj[$key]=$value
           done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
@@ -86,16 +88,18 @@ jobs:
           for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             key=${var_name#"SECRET_"}
-            secret_variables="${secret_variables}\\n            ${key}"
+            echo ${key} >> $secret_variable_filename
             echo "${key}=${obj[${key}]}" >> $GITHUB_ENV
-            echo -e '${secret_variables} => '${secret_variables}
-            echo -e '${secret_variables1} => '${secret_variables1}
           done
           
-          if [[ -v secret_variables ]];
+          
+          if [[ -s $secret_variable_filename ]];
           then
-            secret_variables='|'${secret_variables}
-            echo "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
+            secret_variables=$(cat $secret_variable_filename)
+            echo "wrangler_secrets<<EOF" >> $GITHUB_ENV
+            echo "|" >> $GITHUB_ENV
+            echo "$secret_variables" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
           else
             echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
