@@ -17,6 +17,8 @@ on:
         required: false
         default: false
         type: boolean
+env:
+  WRANGLER_SECRETS: ''
 
 jobs:
   deploy:
@@ -95,16 +97,22 @@ jobs:
           if [[ -s $secret_variable_filename ]];
           then
             secret_variables=$(cat $secret_variable_filename)
-            echo "wrangler_secrets<<EOF" >> $GITHUB_ENV
+            echo "WRANGLER_SECRETS<<EOF" >> $GITHUB_ENV
             echo "$secret_variables" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
-          else
-            echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
 
-      - name: 📦 Publish app
+      - name: 📦 Publish app (with secrets)
+        if: env.WRANGLER_SECRETS !== ''
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
-          secrets: ${{ env.wrangler_secrets }}
+          secrets: ${{ env.WRANGLER_SECRETS }}
+
+      - name: 📦 Publish app (without secrets)
+        if: env.WRANGLER_SECRETS == ''
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          environment: ${{ vars.env_environment }}
