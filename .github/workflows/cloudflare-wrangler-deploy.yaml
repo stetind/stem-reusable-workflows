@@ -97,7 +97,7 @@ jobs:
           if [[ -v secret_variables ]];
           then
             secret_variables='|'${secret_variables}
-            echo -e "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
+            echo "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
           else
             echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
@@ -108,6 +108,8 @@ jobs:
           preCommands: |
             echo '----'
             echo ${{ env.wrangler_secrets }}
+            echo '----'
+            echo -e ${{ env.wrangler_secrets }}
             echo '----'
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
