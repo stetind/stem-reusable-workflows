@@ -86,15 +86,30 @@ jobs:
           while read -r key value; do
             obj[$key]=$value
           done <<< $(jq -r 'to_entries[] | "\(.key) \(.value)"' ${{github.workspace}}/.secrets_json)
+          
           filename="wrangler.toml"
           for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
-            echo "${key}=${obj[${key}]}" >> $GITHUB_ENV 
-          done          
+            key=${var_name#"SECRET_"}
+            secret_variables="${secret_variables}\n${key}"
+            echo "${key}=${obj[${key}]}" >> $GITHUB_ENV
+            echo '${var_name} => '${var_name}
+            echo '${key} => '${key}
+            echo '${obj[${key}]} => '${obj[${key}]}
+            echo '${secret_variables} => '${secret_variables}
+          done
+          
+          if [[ -v b ]];
+          then
+            secret_variables="|\n${secret_variables}"
+            echo "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
+          else
+            echo "wrangler_secrets=''" >> $GITHUB_ENV
+          fi
 
       - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
-          secrets: ${{ inputs.secretVariables }}
+          secrets: ${{ env.wrangler_secrets }}

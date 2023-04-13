@@ -35,4 +35,3 @@ jobs:
     with:
       deploy_environment: ${{ inputs.deploy_environment }}
       debug: ${{ inputs.debug }}
-      secretVariables: ${{ inputs.secretVariables }}
