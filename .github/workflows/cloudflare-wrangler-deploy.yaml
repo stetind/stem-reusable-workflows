@@ -86,12 +86,18 @@ jobs:
           for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             key=${var_name#"SECRET_"}
-            secret_variables="${secret_variables}\n ${key}"
+            secret_variables="${secret_variables}\\n ${key}"
+            secret_variables1="${secret_variables}\\n\\t${key}"
+            
+            
+            
             echo "${key}=${obj[${key}]}" >> $GITHUB_ENV
             echo '${var_name} => '${var_name}
             echo '${key} => '${key}
             echo '${obj[${key}]} => '${obj[${key}]}
             echo '${secret_variables} => '${secret_variables}
+            echo -e '${secret_variables} => '${secret_variables}
+            echo -e '${secret_variables1} => '${secret_variables1}
           done
           
           if [[ -v secret_variables ]];
