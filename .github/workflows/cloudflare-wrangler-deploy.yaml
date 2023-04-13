@@ -99,7 +99,7 @@ jobs:
             echo '${secret_variables} => '${secret_variables}
           done
           
-          if [[ -v b ]];
+          if [[ -v secret_variables ]];
           then
             secret_variables="|\n${secret_variables}"
             echo "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
