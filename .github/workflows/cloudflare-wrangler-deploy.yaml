@@ -103,16 +103,11 @@ jobs:
           else
             echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
+          echo -e ${{ env.wrangler_secrets}}
 
       - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
-          preCommands: |
-            echo '----'
-            echo ${{ env.wrangler_secrets }}
-            echo '----'
-            echo -e ${{ env.wrangler_secrets }}
-            echo '----'
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
           secrets: ${{ env.wrangler_secrets }}
