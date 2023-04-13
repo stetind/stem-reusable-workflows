@@ -86,7 +86,7 @@ jobs:
           for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             key=${var_name#"SECRET_"}
-            secret_variables='${secret_variables}\n${key}'
+            secret_variables='${secret_variables}\n ${key}'
             echo "${key}=${obj[${key}]}" >> $GITHUB_ENV
             echo '${var_name} => '${var_name}
             echo '${key} => '${key}
@@ -105,6 +105,10 @@ jobs:
       - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
+          preCommands: |
+            echo '----'
+            echo ${{ env.wrangler_secrets }}
+            echo '----'
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
           secrets: ${{ env.wrangler_secrets }}
