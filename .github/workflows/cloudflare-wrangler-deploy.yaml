@@ -17,11 +17,6 @@ on:
         required: false
         default: false
         type: boolean
-      secretVariables:
-        description: 'Enable debug?'
-        required: false
-        default: ''
-        type: string
 
 jobs:
   deploy:
@@ -91,7 +86,7 @@ jobs:
           for var_name in $(egrep -ohi '(\$SECRET_([A-Z_0-9]+))' ${filename} | cut -c 2-)
           do
             key=${var_name#"SECRET_"}
-            secret_variables="${secret_variables}\n${key}"
+            secret_variables='${secret_variables}\n${key}'
             echo "${key}=${obj[${key}]}" >> $GITHUB_ENV
             echo '${var_name} => '${var_name}
             echo '${key} => '${key}
@@ -101,8 +96,8 @@ jobs:
           
           if [[ -v secret_variables ]];
           then
-            secret_variables="|\n${secret_variables}"
-            echo "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
+            secret_variables='|${secret_variables}'
+            echo -e "wrangler_secrets=${secret_variables}" >> $GITHUB_ENV
           else
             echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
