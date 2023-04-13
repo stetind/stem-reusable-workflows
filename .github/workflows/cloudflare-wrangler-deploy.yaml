@@ -102,17 +102,9 @@ jobs:
             echo "EOF" >> $GITHUB_ENV
           fi
 
-      - name: 📦 Publish app (with secrets)
-        if: env.WRANGLER_SECRETS !== ''
+      - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           environment: ${{ vars.env_environment }}
           secrets: ${{ env.WRANGLER_SECRETS }}
-
-      - name: 📦 Publish app (without secrets)
-        if: env.WRANGLER_SECRETS == ''
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          environment: ${{ vars.env_environment }}
