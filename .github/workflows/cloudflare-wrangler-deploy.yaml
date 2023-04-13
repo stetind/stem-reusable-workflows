@@ -97,13 +97,12 @@ jobs:
           then
             secret_variables=$(cat $secret_variable_filename)
             echo "wrangler_secrets<<EOF" >> $GITHUB_ENV
-            echo "|" >> $GITHUB_ENV
             echo "$secret_variables" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           else
             echo "wrangler_secrets=''" >> $GITHUB_ENV
           fi
-          echo -e ${{ env.wrangler_secrets}}
+          ${{ env.wrangler_secrets}}
 
       - name: 📦 Publish app
         uses: cloudflare/wrangler-action@2.0.0
