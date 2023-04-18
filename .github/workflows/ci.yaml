@@ -19,6 +19,13 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
+      - name: Caching
+        uses: actions/cache@v3
+        with:
+          path:
+            - vendor/
+          key: $CI_COMMIT_REF_SLUG
+
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -26,6 +33,9 @@ jobs:
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -49,10 +59,16 @@ jobs:
   arch-test:
     name: Architecture Test
     runs-on: ubuntu-latest
-    if: '! github.event.pull_request.draft'
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
+
+      - name: Caching
+        uses: actions/cache@v3
+        with:
+          path:
+            - vendor/
+          key: $CI_COMMIT_REF_SLUG
 
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
@@ -66,7 +82,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: 🚓 Run test
-        script: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
+        run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
 
 #  document:
 #    name: Update Documentation
