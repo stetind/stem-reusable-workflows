@@ -18,6 +18,13 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
+      - name: Cache the dependencies
+        uses: actions/cache@v3
+        id: cache-db
+        with:
+          path: vendor/
+          key: db
+
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -25,9 +32,6 @@ jobs:
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-      - name: 🧙 Install Dependencies
-        uses: ramsey/composer-install@v2
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -39,6 +43,13 @@ jobs:
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
+
+      - name: Cache the dependencies
+        uses: actions/cache@v3
+        id: cache-db
+        with:
+          path: vendor/
+          key: db
 
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
