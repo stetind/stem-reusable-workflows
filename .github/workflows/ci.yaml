@@ -43,14 +43,6 @@ jobs:
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
-
-      - name: Cache the dependencies
-        uses: actions/cache@v3
-        id: cache-db
-        with:
-          path: vendor/
-          key: db
-
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -61,6 +53,15 @@ jobs:
 
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
+        with:
+          custom-cache-key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: Cache the dependencies
+        uses: actions/cache@v3
+        id: cache-db
+        with:
+          path: vendor/
+          key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
       - name: 🚓 Run test
         run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
@@ -80,6 +81,13 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
+      - name: Cache the dependencies
+        uses: actions/cache@v3
+        id: cache-db
+        with:
+          path: vendor/
+          key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
@@ -88,9 +96,6 @@ jobs:
 
       - name: 🔧 Execute Unit Tests
         run: vendor/bin/testbench package:test --parallel --coverage --min=90
-        with:
-          path: vendor/
-          key: db
         env:
           APP_URL: http://127.0.0.1:8001
           DUSK_APP_HOST: 127.0.0.1
