@@ -23,7 +23,7 @@ jobs:
         id: cache-db
         with:
           path: vendor/
-          key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+          key: "caching"
 
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
@@ -54,7 +54,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          custom-cache-key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+          custom-cache-key: "caching"
 
       - name: Cache the dependencies
         uses: actions/cache@v3
