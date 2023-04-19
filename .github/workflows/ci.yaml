@@ -61,7 +61,7 @@ jobs:
         id: cache-db
         with:
           path: vendor/
-          key: "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+          key: "caching"
 
       - name: 🚓 Run test
         run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
