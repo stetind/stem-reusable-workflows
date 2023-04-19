@@ -30,8 +30,8 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+#      - name: 🧙 Configure Composer
+#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
