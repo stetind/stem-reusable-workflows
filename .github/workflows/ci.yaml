@@ -84,6 +84,8 @@ jobs:
 #        with:
 #          path: vendor/
 #          key: "caching"
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
       - name: 🚓 Run test
         run: vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered
