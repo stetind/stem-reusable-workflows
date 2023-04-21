@@ -77,13 +77,19 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
+      - name: Save  cache Dependencies
+        uses: actions/cache/save@v3
+        with:
+          path: vendor/
+          key: "caching"
+
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
-        with:
-          custom-cache-key: "caching"
+#        with:
+#          custom-cache-key: "caching"
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
