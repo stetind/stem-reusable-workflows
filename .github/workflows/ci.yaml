@@ -28,7 +28,7 @@ jobs:
       - name: Restore cache Dependencies
         uses: actions/cache/restore@v3
         with:
-          path: vendor/
+          path: ./vendor
           key: "caching"
 
       - name: 🔨 Setup php
@@ -80,7 +80,7 @@ jobs:
       - name: Save  cache Dependencies
         uses: actions/cache/save@v3
         with:
-          path: vendor/
+          path: ./vendor
           key: "caching"
 
       - name: 🧙 Configure Composer
