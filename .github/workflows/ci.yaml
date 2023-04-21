@@ -31,7 +31,6 @@ jobs:
       - name: Restore cache Dependencies
         uses: actions/cache/restore@v3
         with:
-          path: vendor-folder
           key: "caching"
 
       - name: 🔨 Setup php
@@ -86,8 +85,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          path: vendor-folder
-          key: "caching"
+          custom-cache-key: "caching"
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
