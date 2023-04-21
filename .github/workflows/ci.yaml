@@ -28,6 +28,7 @@ jobs:
       - name: Restore cache Dependencies
         uses: actions/cache/restore@v3
         with:
+          path: vendor/
           key: "caching"
 
       - name: 🔨 Setup php
