@@ -28,6 +28,12 @@ jobs:
 #          path: vendor/
 #          key: "caching"
 
+      - name: Restore cache Dependencies
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor-folder
+          key: "caching"
+
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -68,6 +74,7 @@ jobs:
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
+
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -79,19 +86,9 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          custom-cache-key: "caching"
-
-      - save_cache:
+          path: vendor-folder
           key: "caching"
-          paths:
-            - ~/vendor
 
-#      - name: Cache the dependencies
-#        uses: actions/cache@v3
-#        id: cache-db
-#        with:
-#          path: vendor/
-#          key: "caching"
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
