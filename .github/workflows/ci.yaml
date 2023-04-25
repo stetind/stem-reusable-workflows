@@ -53,7 +53,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          enableCrossOsArchive: true
+          composer-options: "--ignore-platform-reqs --optimize-autoloader"
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -104,8 +104,8 @@ jobs:
 
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
-#        with:
-#          custom-cache-key: ${{ runner.os }}-composer-
+        with:
+           composer-options: "--ignore-platform-reqs --optimize-autoloader"
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
