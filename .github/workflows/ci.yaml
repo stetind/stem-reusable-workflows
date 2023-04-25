@@ -52,6 +52,8 @@ jobs:
 
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
+        with:
+          ignore-cache: "yes"
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
