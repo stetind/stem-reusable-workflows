@@ -81,6 +81,9 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
 
+      - name: Tar files
+        run: tar -cvzf composer.tgz vendor
+
       - name: Upload composer assets
         uses: actions/upload-artifact@v2
         with:
