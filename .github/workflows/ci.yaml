@@ -53,7 +53,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          composer-options: "--prefer-dist --no-scripts"
+          enableCrossOsArchive: true
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
