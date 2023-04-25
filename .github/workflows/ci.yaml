@@ -18,30 +18,6 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
-#      - name: Get Composer Cache Directory
-#        id: composer-cache
-#        run: |
-#          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-#      - uses: actions/cache@v3
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-#          restore-keys: |
-#            ${{ runner.os }}-composer-
-#
-#      - name: Cache the dependencies
-#        uses: actions/cache@v3
-#        id: cache-db
-#        with:
-#          path: vendor/
-#          key: "caching"
-
-#      - name: Restore cache Dependencies
-#        uses: actions/cache/restore@v3
-#        with:
-#          path: ./vendor
-#          key: "caching"
-
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
         with:
@@ -50,10 +26,11 @@ jobs:
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
-        with:
-          composer-options: "--no-interaction --no-progress --ansi"
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -93,19 +70,17 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
-#      - name: Save  cache Dependencies
-#        uses: actions/cache/save@v3
-#        with:
-#          path: ./vendor
-#          key: "caching"
-
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
 
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
         with:
-           composer-options: "--no-interaction --no-progress --ansi"
+          name: dist-without-markdown
+          path: vendor/
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
