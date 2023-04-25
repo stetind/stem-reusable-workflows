@@ -53,7 +53,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-          composer-options: "--ignore-platform-reqs --optimize-autoloader"
+          composer-options: "--no-interaction --no-progress --ansi"
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -105,7 +105,7 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
         with:
-           composer-options: "--ignore-platform-reqs --optimize-autoloader"
+           composer-options: "--no-interaction --no-progress --ansi"
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
