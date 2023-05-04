@@ -106,7 +106,7 @@ jobs:
       - name: 🚓 Run test
         run: | 
           for CONF in deptrac.yaml deptrac-*.yaml; do 
-            test ! -f "$CONF" && continue || vendor/bin/deptrac -v --report-uncovered --fail-on-uncovered --config-file="$CONF"; 
+            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF"; 
           done
 
   security-check:
