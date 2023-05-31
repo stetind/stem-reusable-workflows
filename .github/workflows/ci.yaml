@@ -104,9 +104,9 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: 🚓 Run test
-        run: | 
-          for CONF in deptrac.yaml deptrac-*.yaml; do 
-            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF"; 
+        run: |
+          for CONF in deptrac.yaml deptrac-*.yaml; do
+            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF";
           done
 
   security-check:
@@ -148,29 +148,11 @@ jobs:
       - name: 🧙 Install Dependencies
         uses: ramsey/composer-install@v2
 
-      - name: Update Dusk Chromedriver
-        run: vendor/bin/dusk-updater detect --auto-update
-
       - name: 🔧 Execute Unit Tests
         run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
         env:
           APP_URL: http://127.0.0.1:8001
-          DUSK_APP_HOST: 127.0.0.1
-          DUSK_DRIVER_URL: http://127.0.0.1:9515
 
-      - name: Upload Failed Screenshots
-        uses: actions/upload-artifact@v3.1.2
-        if: failure()
-        with:
-          name: screenshots
-          path: tests/Browser/screenshots/*
-
-      - name: Upload Failed Console Logs
-        if: failure()
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: console
-          path: tests/Browser/console
 
 
 #  document:
