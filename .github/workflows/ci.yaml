@@ -2,6 +2,12 @@ name: CI
 
 on:
   workflow_call:
+    inputs:
+      testing-runner:
+        description: 'In case of large testing process, we can define a different runner, only for PhpUnit tests'
+        required: false
+        type: string
+        default: ubuntu-latest
     secrets:
       COMPOSER_ACCESS_TOKEN:
         required: true
@@ -130,7 +136,8 @@ jobs:
 
   test:
     name: PHPUnit
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.testing-runner }}
+#    runs-on: ubuntu-latest
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
