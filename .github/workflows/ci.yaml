@@ -130,7 +130,8 @@ jobs:
 
   test:
     name: PHPUnit
-    runs-on: ubuntu-latest
+    runs-on: second-api-runner
+#    runs-on: ubuntu-latest
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
