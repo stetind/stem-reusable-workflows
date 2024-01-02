@@ -12,4 +12,4 @@ jobs:
         uses: TimonVS/pr-labeler-action@v4
         with:
           repo-token: ${{ github.token }}
-          configuration-path: .github/pr-labeler.yml
+          configuration-path: .github/pr-labeler.yaml
