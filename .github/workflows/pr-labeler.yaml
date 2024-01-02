@@ -4,8 +4,6 @@ on:
 
 jobs:
   pr-labeler:
-    permissions:
-      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Auto-label issue
