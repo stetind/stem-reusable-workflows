@@ -7,3 +7,6 @@
 - label: 'feature'
   branch:
     - '/feat\/.+/'
+- label: 'documentation'
+  branch:
+    - '/docs\/.+/'
