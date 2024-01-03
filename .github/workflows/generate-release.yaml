@@ -25,16 +25,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
 
-      - uses: sgpublic/delete-release-action@v1.1
-        with:
-          release-drop: false
-          pre-release-drop: true
-          pre-release-drop-tag: true
-          pre-release-keep-count: -1
-          draft-drop-count: -1
-          draft-drop: true
+      - name: Delete Old draft releases
+        run : |
+          gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
+             echo "deleting ${line[0]}" ;
+             gh release delete -y ${line[0]}  --cleanup-tag;
+          done;
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+
 
       - name: Calculate Next Semver Version
         id: semver
@@ -69,7 +68,7 @@ jobs:
         uses: ncipollo/release-action@v1.12.0
         with:
           allowUpdates: true
-          prerelease: true
+          draft: true
           makeLatest: true
           tag: ${{ steps.semver.outputs.nextStrict }}
           name: ${{ steps.semver.outputs.nextStrict }}
