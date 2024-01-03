@@ -10,3 +10,11 @@
 - label: 'documentation'
   branch:
     - '/docs\/.+/'
+- label: 'build'
+  branch:
+    - '/ci\/.+/'
+- label: 'refactoring'
+  branch:
+    - '/ref\/.+/'
+    - '/perf\/.+/'
+    - '/refactor\/.+/'
