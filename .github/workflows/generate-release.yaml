@@ -47,15 +47,14 @@ jobs:
         uses: ncipollo/release-action@v1.12.0
         with:
           allowUpdates: true
-          prerelease: true
-          draft: false
+          draft: true
           commit: ${{ github.sha }}
           tag: ${{ steps.semver.outputs.nextStrict }}
           name: ${{ steps.semver.outputs.nextStrict }}
           body: '*pending...*'
           token: ${{ github.token }}
 
-      - name: Update CHANGELOG
+      - name: Update CHANGELOG  # he needs tags to work
         id: changelog
         uses: requarks/changelog-action@v1
         with:
