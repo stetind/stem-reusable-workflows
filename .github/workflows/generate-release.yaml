@@ -24,6 +24,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+
+      - uses: sgpublic/delete-release-action@v1.1
+        with:
+          release-drop: false
+          pre-release-drop: true
+          pre-release-drop-tag: true
+          pre-release-keep-count: -1
+          draft-drop-count: -1
+          draft-drop: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
       - name: Calculate Next Semver Version
         id: semver
         uses: ietf-tools/semver-action@v1
@@ -57,7 +69,7 @@ jobs:
         uses: ncipollo/release-action@v1.12.0
         with:
           allowUpdates: true
-          draft: true
+          prerelease: true
           makeLatest: true
           tag: ${{ steps.semver.outputs.nextStrict }}
           name: ${{ steps.semver.outputs.nextStrict }}
