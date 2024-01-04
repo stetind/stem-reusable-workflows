@@ -4,6 +4,9 @@
 - label: 'bug'
   branch:
     - '/fix\/.+/'
+- label: 'bug'
+  branch:
+    - '/bugfix\/.+/'
 - label: 'feature'
   branch:
     - '/feat\/.+/'
@@ -16,5 +19,9 @@
 - label: 'refactoring'
   branch:
     - '/ref\/.+/'
+- label: 'refactoring'
+  branch:
     - '/perf\/.+/'
+- label: 'refactoring'
+  branch:
     - '/refactor\/.+/'
