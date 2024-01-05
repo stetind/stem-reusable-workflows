@@ -51,7 +51,7 @@ The release name and the accompanying tag are incremented in accordance with the
 |-------------------|------------------------------------------------------------------------------------------------------------------------|
 | Patch             | Commit type is `fix`, `bugfix`, `perf`, `ref`, `refactor`, `test`, `tests`, `chore`, `ci`, `docs`, `build`.                                    |
 | Minor             | Commit type is `feat`, `feature`.                                                                                           |
-| Major             | Commit message includes **BREAKING CHANGE**.  <br/> Commit type contains **!** (Example: `type(scope)!: message` or `type!: message` |
+| Major             | Commit message includes **BREAKING CHANGE**.  <br/> Commit type contains **!** (`type(scope)!: message` or `type!: message`) |
 
 
 
