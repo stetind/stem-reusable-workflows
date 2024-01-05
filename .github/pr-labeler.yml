@@ -1,6 +1,6 @@
 feature: ['feature/*', 'feat/*']
 bug: ['fix/*', 'bugfix/*']
 refactoring: ['ref/*', 'perf/*', 'refactoring/*']
-build: ['ci/*']
-chore: ['chore/*']
-documentation: ['docs/*']
+build: 'ci/*'
+chore: 'chore/*'
+documentation: 'docs/*'
