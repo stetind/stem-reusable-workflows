@@ -68,8 +68,8 @@ jobs:
         uses: ncipollo/release-action@v1.12.0
         with:
           allowUpdates: true
-          draft: false
-          prerelease: true
+          draft: true
+          prerelease: false
           makeLatest: true
           tag: ${{ steps.semver.outputs.nextStrict }}
           name: ${{ steps.semver.outputs.nextStrict }}
