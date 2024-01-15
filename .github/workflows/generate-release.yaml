@@ -44,7 +44,7 @@ jobs:
           noVersionBumpBehavior: current
 
       - name: Create Draft Release
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1.13.0
         with:
           allowUpdates: true
           draft: false
@@ -65,7 +65,7 @@ jobs:
           includeInvalidCommits: true
 
       - name: Create Release ${{ steps.semver.outputs.nextStrict }}
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1.13.0
         with:
           allowUpdates: true
           draft: true
