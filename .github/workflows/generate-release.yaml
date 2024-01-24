@@ -1,4 +1,4 @@
-name: Release - NOT WORKING YET
+name: Release
 
 on:
   workflow_call:
@@ -25,16 +25,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
 
-      - name: Delete Old draft releases
-        run : |
-          gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
-             echo "deleting ${line[0]}" ;
-             gh release delete -y ${line[0]}  --cleanup-tag;
-          done;
-        env:
-          GH_TOKEN: ${{ github.token }}
+#      - name: Delete Old draft releases
+#        run : |
+#          gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
+#             echo "deleting ${line[0]}" ;
+#             gh release delete -y ${line[0]}  --cleanup-tag;
+#          done;
+#        env:
+#          GH_TOKEN: ${{ github.token }}
 
-
+      - name: conventional changelog action
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#
+#
 #      - name: Calculate Next Semver Version
 #        id: semver
 #        uses: ietf-tools/semver-action@v1
@@ -43,17 +48,16 @@ jobs:
 #          patchList: fix, bugfix, perf, ref, refactor, test, tests, chore, ci, docs, build
 #          noVersionBumpBehavior: current
 #
-#      - name: Create Draft Release
-#        uses: ncipollo/release-action@v1.12.0
-#        with:
-#          allowUpdates: true
-#          draft: false
-#          prerelease: true
-#          commit: ${{ github.sha }}
-#          tag: ${{ steps.semver.outputs.nextStrict }}
-#          name: ${{ steps.semver.outputs.nextStrict }}
-#          body: '*pending...*'
-#          token: ${{ github.token }}
+      - name: Create Draft Release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          allowUpdates: true
+          draft: true
+          commit: ${{ github.sha }}
+          tag: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
+          body: ${{steps.changelog.outputs.clean_changelog}}
+          token: ${{ github.token }}
 #
 #      - name: Update CHANGELOG  # he needs tags to work
 #        id: changelog
