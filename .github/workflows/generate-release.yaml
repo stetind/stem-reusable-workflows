@@ -52,13 +52,13 @@ jobs:
 #          writeToFile: false
 #          includeInvalidCommits: true
 
-      - name: Update CHANGELOG  # he needs tags to work
-        id: changelog
-        uses: actions/changelog-generator
-        with:
-          previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
-          nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
-          nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
+#      - name: Update CHANGELOG  # he needs tags to work
+#        id: changelog
+#        uses: actions/changelog-generator
+#        with:
+#          previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
+#          nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
+#          nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
 
 
       - name: Create Draft Release
