@@ -54,7 +54,7 @@ jobs:
 
       - name: Update CHANGELOG
         id: changelog
-        uses: actions/changelog-generator
+        uses: mrchief/universal-changelog-action@v1.3.2
         with:
           previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
           nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
