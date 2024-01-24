@@ -52,6 +52,21 @@ jobs:
 #          writeToFile: false
 #          includeInvalidCommits: true
 
+
+      - name: Get Commits Since
+        id: commits
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const commits = await github.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              since: '${{ steps.semver.outputs.current }}'
+            })
+            // Strip out commit.verification property to make commit info shorter and avoid error: ##[error]Argument list too long
+            core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
+
       - name: Update CHANGELOG
         id: changelog
         uses: mrchief/universal-changelog-action@v1.3.2
@@ -59,6 +74,7 @@ jobs:
           previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
           nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
           nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
+          commits: ${{ steps.commits.outputs.commits }}
 
 
       - name: Create Draft Release
