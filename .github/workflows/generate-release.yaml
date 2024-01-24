@@ -34,7 +34,7 @@ jobs:
 #        env:
 #          GH_TOKEN: ${{ github.token }}
       - name: Checkout latest release tag
-        run: echo LATEST_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+        run: echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
 
 
