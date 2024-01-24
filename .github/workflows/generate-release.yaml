@@ -29,7 +29,7 @@ jobs:
         run : |
           gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
              echo "deleting ${line[0]}" ;
-             gh release delete -y ${line[0]}  --cleanup-tag;
+             gh release delete -y ${line[0]} ;
           done;
         env:
           GH_TOKEN: ${{ github.token }}
