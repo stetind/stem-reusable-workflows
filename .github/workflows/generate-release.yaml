@@ -34,8 +34,9 @@ jobs:
 #        env:
 #          GH_TOKEN: ${{ github.token }}
       - name: Checkout latest release tag
-        run: echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "LATEST_TAG=${LATEST_TAG:1}" >> $GITHUB_ENV
 
 
       - name: conventional changelog action
@@ -47,7 +48,7 @@ jobs:
           skip-commit: true
           skip-tag: true
           tag-prefix: ''
-          fallback-version: $LATEST_TAG
+          fallback-version: ${{ env.LATEST_TAG }}
           git-push: false
           release-count: 0
 #
@@ -68,7 +69,7 @@ jobs:
           commit: ${{ github.sha }}
           tag: ${{ steps.changelog.outputs.tag }}
           name: ${{ steps.changelog.outputs.version }}
-          body: ${{steps.changelog.outputs.clean_changelog}}
+          body: ${{steps.changelog.outputs.changelog}}
           token: ${{ github.token }}
 #
 #      - name: Update CHANGELOG  # he needs tags to work
