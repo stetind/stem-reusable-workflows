@@ -33,11 +33,21 @@ jobs:
 #          done;
 #        env:
 #          GH_TOKEN: ${{ github.token }}
+      - name: Checkout latest release tag
+        run: echo LATEST_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+
+
 
       - name: conventional changelog action
+        id: changelog
         uses: TriPSs/conventional-changelog-action@latest
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+          skip-version-file: true
+          skip-commit: true
+          skip-tag: true
+          tag-prefix: ''
+          fallback-version: ${LATEST_TAG}
 #
 #
 #      - name: Calculate Next Semver Version
@@ -55,7 +65,7 @@ jobs:
           draft: true
           commit: ${{ github.sha }}
           tag: ${{ steps.changelog.outputs.tag }}
-          name: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.version }}
           body: ${{steps.changelog.outputs.clean_changelog}}
           token: ${{ github.token }}
 #
