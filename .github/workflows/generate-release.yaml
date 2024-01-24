@@ -48,6 +48,7 @@ jobs:
           skip-tag: true
           tag-prefix: ''
           fallback-version: $LATEST_TAG
+          git-push: false
 #
 #
 #      - name: Calculate Next Semver Version
