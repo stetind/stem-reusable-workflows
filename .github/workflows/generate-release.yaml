@@ -62,10 +62,11 @@ jobs:
             const commits = await github.repos.listCommits({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              since: '${{ steps.semver.outputs.current }}'
+              sha: '${{ steps.semver.outputs.current }}'
             })
             // Strip out commit.verification property to make commit info shorter and avoid error: ##[error]Argument list too long
-            core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
+            //core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
+             core.setOutput("commits", commits.data)
 
       - name: Update CHANGELOG
         id: changelog
