@@ -1,0 +1,12 @@
+feature:
+  - base-branch: ['^feature', 'feature']
+bug:
+  - base-branch: ['^fix', 'fix', '^bugfix', 'bugfix']
+refactoring:
+  - base-branch: ['^ref', 'ref', '^perf', 'perf', '^refactoring', 'refactoring']
+build:
+  - base-branch: ['ci', '^ci']
+chore:
+  - base-branch: ['chore', '^chore']
+documentation:
+  - base-branch: ['docs', '^docs']

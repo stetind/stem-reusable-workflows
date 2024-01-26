@@ -1,0 +1,16 @@
+name: Pull Request Labeler
+on:
+  workflow_call:
+
+jobs:
+  labeler:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-label issue
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ github.token }}
+          configuration-path: .github/pr-labeler.yml
