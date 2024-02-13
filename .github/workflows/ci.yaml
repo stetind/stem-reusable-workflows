@@ -150,7 +150,7 @@ jobs:
         shell: pwsh
         run: |
           $diff = git diff --name-only HEAD^ HEAD
-          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
+          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$' -or $_ -match '^src/Swagger/'}
           $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
           
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
@@ -160,7 +160,7 @@ jobs:
     runs-on: ${{ inputs.testing-runner }}
 #    runs-on: ubuntu-latest
     needs: check-changed-files
-    if: needs.check-changed-files.outputs.has_only_docs == 'True'
+    if: needs.check-changed-files.outputs.has_only_docs == 'False'
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
