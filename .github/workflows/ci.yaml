@@ -167,9 +167,10 @@ jobs:
           filters: |
             has_only_docs:
               - '**'
-              - '!**/Swagger/**'
-#              - '!docs/**'
-#              - '!**.md'
+              - '!**/docs/**'
+              - '!**/src/*Swagger/**'
+              - '!**/README.md'
+
       # run only if 'workflows' files were changed
       - name: workflow tests
         if: steps.filter.outputs.has_only_docs == 'true'
