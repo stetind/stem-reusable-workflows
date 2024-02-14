@@ -167,8 +167,7 @@ jobs:
           filters: |
             has_only_docs:
               - '**'
-              - '!(src/Swagger/**)**'
-#              - '!**/Swagger/**'
+              - '!**/Swagger/**'
 #              - '!docs/**'
 #              - '!**.md'
       # run only if 'workflows' files were changed
