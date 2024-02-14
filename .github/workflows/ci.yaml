@@ -166,9 +166,10 @@ jobs:
         with:
           filters: |
             has_only_docs:
-              - '**/docs/**'
-              - '**/src/Swagger/**'
-              - '**/README.md'
+              - '**'
+              - '!**/docs/**'
+              - '!**/src/Swagger/**'
+              - '!**/README.md'
 
       # run only if 'workflows' files were changed
       - name: workflow tests
