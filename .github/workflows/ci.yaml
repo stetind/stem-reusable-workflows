@@ -16,177 +16,151 @@ env:
   PHP_VERSION: 8.1
 
 jobs:
-#  duplication-check:
-#    name: Code duplication check
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: 🔨 Setup php
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ env.PHP_VERSION }}
-#          tools: phpcpd
-#
-#      - name: 🔧 Check code duplication in "src" directory
-#        run: phpcpd src/ --min-lines=6
-#
-#  pint:
-#    name: Laravel Pint Linting
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: 🔨 Setup php
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ env.PHP_VERSION }}
-#
-#      - name: 🧙 Configure Composer
-#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-#
-#      - name: 🧙 Install Dependencies
-#        uses: ramsey/composer-install@v2
-#
-#      - name: 🔧  Run linter
-#        run: vendor/bin/pint -vv --config ruleset-pint.json --test
-#
-##  phpmd:
-##    name: Php Mess Detector - Check
-##    runs-on: ubuntu-latest
-##    steps:
-##      - name: 🛫 Checkout
-##        uses: actions/checkout@v3
-##
-##      - name: 🔨 Setup php
-##        uses: shivammathur/setup-php@v2
-##        with:
-##          php-version: 8.1
-##          tools: phpmd
-##
-##      - name: 🔧  Run Check
-##        run: phpmd src text cleancode,codesize,controversial,design,unusedcode
-#
-#  analyze:
-#    name: PHPStan
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: 🔨 Setup php
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ env.PHP_VERSION }}
-#
-#      - name: 🧙 Configure Composer
-#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-#
-#      - name: 🧙 Install Dependencies
-#        uses: ramsey/composer-install@v2
-#        #        https://github.com/sebastianbergmann/phpcpd/blob/21158aed508ffa2480b90f2af93724e3355c703f/.github/workflows/ci.yml#L58
-#
-#      - name: 🔧 Run analyzer
-#        run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
-#
-#  arch-test:
-#    name: Architecture Test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: 🔨 Setup php
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ env.PHP_VERSION }}
-#
-#      - name: 🧙 Configure Composer
-#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-#
-#      - name: 🧙 Install Dependencies
-#        uses: ramsey/composer-install@v2
-#
-#      - name: 🚓 Run test
-#        run: |
-#          for CONF in deptrac.yaml deptrac-*.yaml; do
-#            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF";
-#          done
-#
-#  security-check:
-#    name: Vulnerability Check
-#    runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
-#    steps:
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Cache the vulnerability database
-#        uses: actions/cache@v3
-#        id: cache-db
-#        with:
-#          path: ~/.symfony/cache
-#          key: db
-#
-#      - name: 💩 Run security check
-#        uses: symfonycorp/security-checker-action@v5
-#        with:
-#          disable-exit-code: 1
+  duplication-check:
+    name: Code duplication check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
 
-#  check-changed-files:
-#    runs-on: 'ubuntu-latest'
-#    outputs:
-#      has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
+      - name: 🔨 Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: phpcpd
+
+      - name: 🔧 Check code duplication in "src" directory
+        run: phpcpd src/ --min-lines=6
+
+  pint:
+    name: Laravel Pint Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔨 Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: 🔧  Run linter
+        run: vendor/bin/pint -vv --config ruleset-pint.json --test
+
+#  phpmd:
+#    name: Php Mess Detector - Check
+#    runs-on: ubuntu-latest
 #    steps:
 #      - name: 🛫 Checkout
 #        uses: actions/checkout@v3
+#
+#      - name: 🔨 Setup php
+#        uses: shivammathur/setup-php@v2
 #        with:
-#          # Checkout as many commits as needed for the diff
-#          fetch-depth: 2
+#          php-version: 8.1
+#          tools: phpmd
 #
-#      - name: getChangedFiles
-#        id: check_file_changed
-#        shell: pwsh
-#        run: |
-#          $diff = git diff --name-only HEAD^ HEAD
-#          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
-#          $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
-#
-#          echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
+#      - name: 🔧  Run Check
+#        run: phpmd src text cleancode,codesize,controversial,design,unusedcode
+
+  analyze:
+    name: PHPStan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔨 Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+        #        https://github.com/sebastianbergmann/phpcpd/blob/21158aed508ffa2480b90f2af93724e3355c703f/.github/workflows/ci.yml#L58
+
+      - name: 🔧 Run analyzer
+        run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
+
+  arch-test:
+    name: Architecture Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔨 Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: 🚓 Run test
+        run: |
+          for CONF in deptrac.yaml deptrac-*.yaml; do
+            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF";
+          done
+
+  security-check:
+    name: Vulnerability Check
+    runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache the vulnerability database
+        uses: actions/cache@v3
+        id: cache-db
+        with:
+          path: ~/.symfony/cache
+          key: db
+
+      - name: 💩 Run security check
+        uses: symfonycorp/security-checker-action@v5
+        with:
+          disable-exit-code: 1
 
   check-changed-files:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     outputs:
-      output1: ${{ steps.filter.outputs.has_only_docs }}
+      has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
-        id: filter
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
         with:
-          filters: |
-            has_only_docs:
-              - '**'
-              - '!**/docs/**'
-              - '!**/src/Swagger/**'
-              - '!**/README.md'
+          # Checkout as many commits as needed for the diff
+          fetch-depth: 2
 
-      # run only if 'workflows' files were changed
-      - name: workflow tests
-        if: steps.filter.outputs.has_only_docs == 'true'
-        run: echo "Workflow file"
+      - name: getChangedFiles
+        id: check_file_changed
+        shell: pwsh
+        run: |
+          $diff = git diff --name-only HEAD^ HEAD
+          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
+          $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
 
-      # run only if not 'workflows' files were changed
-      - name: not workflow tests
-        if: steps.filter.outputs.has_only_docs != 'true'
-        run: echo "NOT workflow file"
+          echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
 
   test:
     name: PHPUnit
-#    runs-on: ${{ inputs.testing-runner }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.testing-runner }}
+#    runs-on: ubuntu-latest
     needs: check-changed-files
-    if: needs.check-changed-files.outputs.has_only_docs == 'false'
+    if: needs.check-changed-files.outputs.has_only_docs == 'False'
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
@@ -195,19 +169,19 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
           coverage: xdebug
 
-#      - name: 🛫 Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: 🧙 Configure Composer
-#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-#
-#      - name: 🧙 Install Dependencies
-#        uses: ramsey/composer-install@v2
-#
-#      - name: 🔧 Execute Unit Tests
-#        run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
-#        env:
-#          APP_URL: http://127.0.0.1:8001
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🧙 Configure Composer
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+
+      - name: 🧙 Install Dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: 🔧 Execute Unit Tests
+        run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
+        env:
+          APP_URL: http://127.0.0.1:8001
 
 
 
