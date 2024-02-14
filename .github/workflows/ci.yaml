@@ -166,6 +166,7 @@ jobs:
         with:
           filters: |
             has_only_docs:
+              - '**'
               - '!.github/**'
               - '!src/Swagger/**'
               - '!docs/**'
