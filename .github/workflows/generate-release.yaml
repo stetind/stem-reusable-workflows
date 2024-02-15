@@ -43,6 +43,12 @@ jobs:
           noVersionBumpBehavior: current
 
 
+      - name: Create Draft release
+        run: gh release create ${{ steps.semver.outputs.nextStrict }} --draft 10 --generate-notes --title ${{ steps.semver.outputs.nextStrict }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+
 #      - name: Update CHANGELOG  # he needs tags to work
 #        id: changelog
 #        uses: requarks/changelog-action@v1
@@ -53,40 +59,40 @@ jobs:
 #          includeInvalidCommits: true
 
 
-      - name: Get Commits Since
-        id: commits
-        uses: actions/github-script@v2
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const commits = await github.repos.listCommits({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: '${{ steps.semver.outputs.current }}'
-            })
-            // Strip out commit.verification property to make commit info shorter and avoid error: ##[error]Argument list too long
-            //core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
-             core.setOutput("commits", commits.data)
-
-      - name: Update CHANGELOG
-        id: changelog
-        uses: mrchief/universal-changelog-action@v1.3.2
-        with:
-          previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
-          nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
-          nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
-          commits: ${{ steps.commits.outputs.commits }}
-
-
-      - name: Create Draft Release
-        uses: ncipollo/release-action@v1.12.0
-        with:
-          draft: true
-          commit: ${{ github.sha }}
-          tag: ${{ steps.semver.outputs.nextStrict }}
-          name: ${{ steps.semver.outputs.nextStrict }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          token: ${{ github.token }}
+#      - name: Get Commits Since
+#        id: commits
+#        uses: actions/github-script@v2
+#        with:
+#          github-token: ${{ github.token }}
+#          script: |
+#            const commits = await github.repos.listCommits({
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              since: '${{ steps.semver.outputs.current }}'
+#            })
+#            // Strip out commit.verification property to make commit info shorter and avoid error: ##[error]Argument list too long
+#            //core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
+#             core.setOutput("commits", commits.data)
+#
+#      - name: Update CHANGELOG
+#        id: changelog
+#        uses: mrchief/universal-changelog-action@v1.3.2
+#        with:
+#          previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
+#          nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
+#          nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
+#          commits: ${{ steps.commits.outputs.commits }}
+#
+#
+#      - name: Create Draft Release
+#        uses: ncipollo/release-action@v1.12.0
+#        with:
+#          draft: true
+#          commit: ${{ github.sha }}
+#          tag: ${{ steps.semver.outputs.nextStrict }}
+#          name: ${{ steps.semver.outputs.nextStrict }}
+#          body: ${{ steps.changelog.outputs.changelog }}
+#          token: ${{ github.token }}
 
 
 #
