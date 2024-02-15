@@ -44,7 +44,7 @@ jobs:
 
 
       - name: Create Draft release
-        run: gh release create ${{ steps.semver.outputs.nextStrict }} --draft --generate-notes --title ${{ steps.semver.outputs.nextStrict }}
+        run: gh release create ${{ steps.semver.outputs.nextStrict }}  --title ${{ steps.semver.outputs.nextStrict }} --draft --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
 
