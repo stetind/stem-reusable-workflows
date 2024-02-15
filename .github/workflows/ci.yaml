@@ -134,10 +134,33 @@ jobs:
         with:
           disable-exit-code: 1
 
+  check-changed-files:
+    runs-on: 'ubuntu-latest'
+    outputs:
+      has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
+    steps:
+      - name: 🛫 Checkout
+        uses: actions/checkout@v3
+        with:
+          # Checkout as many commits as needed for the diff
+          fetch-depth: 2
+
+      - name: getChangedFiles
+        id: check_file_changed
+        shell: pwsh
+        run: |
+          $diff = git diff --name-only HEAD^ HEAD
+          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
+          $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
+
+          echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
+
   test:
     name: PHPUnit
     runs-on: ${{ inputs.testing-runner }}
 #    runs-on: ubuntu-latest
+    needs: check-changed-files
+    if: needs.check-changed-files.outputs.has_only_docs == 'False'
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
