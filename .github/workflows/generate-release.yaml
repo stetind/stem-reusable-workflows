@@ -1,4 +1,4 @@
-name: Release - NOT WORKING YET
+name: Release
 
 on:
   workflow_call:
@@ -29,40 +29,72 @@ jobs:
         run : |
           gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
              echo "deleting ${line[0]}" ;
-             gh release delete -y ${line[0]}  --cleanup-tag;
+             gh release delete -y ${line[0]} ;
           done;
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Calculate Next Semver Version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
+          patchList: fix, bugfix, perf, ref, refactor, test, tests, chore, ci, docs, build
+          noVersionBumpBehavior: current
 
-#      - name: Calculate Next Semver Version
-#        id: semver
-#        uses: ietf-tools/semver-action@v1
-#        with:
-#          token: ${{ github.token }}
-#          patchList: fix, bugfix, perf, ref, refactor, test, tests, chore, ci, docs, build
-#          noVersionBumpBehavior: current
-#
-#      - name: Create Draft Release
-#        uses: ncipollo/release-action@v1.12.0
-#        with:
-#          allowUpdates: true
-#          draft: false
-#          prerelease: true
-#          commit: ${{ github.sha }}
-#          tag: ${{ steps.semver.outputs.nextStrict }}
-#          name: ${{ steps.semver.outputs.nextStrict }}
-#          body: '*pending...*'
-#          token: ${{ github.token }}
-#
+
+      - name: Create Draft release
+        run: gh release create ${{ steps.semver.outputs.nextStrict }}  --title ${{ steps.semver.outputs.nextStrict }} --draft --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+
 #      - name: Update CHANGELOG  # he needs tags to work
 #        id: changelog
 #        uses: requarks/changelog-action@v1
 #        with:
 #          token: ${{ github.token }}
-#          tag: ${{ steps.semver.outputs.nextStrict }}
+#          tag: ${{ github.ref_name }}
 #          writeToFile: false
 #          includeInvalidCommits: true
+
+
+#      - name: Get Commits Since
+#        id: commits
+#        uses: actions/github-script@v2
+#        with:
+#          github-token: ${{ github.token }}
+#          script: |
+#            const commits = await github.repos.listCommits({
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              since: '${{ steps.semver.outputs.current }}'
+#            })
+#            // Strip out commit.verification property to make commit info shorter and avoid error: ##[error]Argument list too long
+#            //core.setOutput("commits", JSON.stringify(commits.data.map(c => ({...c, commit: { ...c.commit, verification: null } }))))
+#             core.setOutput("commits", commits.data)
+#
+#      - name: Update CHANGELOG
+#        id: changelog
+#        uses: mrchief/universal-changelog-action@v1.3.2
+#        with:
+#          previousReleaseTagNameOrSha: ${{ steps.semver.outputs.current }}
+#          nextReleaseTagName: ${{ steps.semver.outputs.nextStrict }}
+#          nextReleaseName: ${{ steps.semver.outputs.nextStrict }}
+#          commits: ${{ steps.commits.outputs.commits }}
+#
+#
+#      - name: Create Draft Release
+#        uses: ncipollo/release-action@v1.12.0
+#        with:
+#          draft: true
+#          commit: ${{ github.sha }}
+#          tag: ${{ steps.semver.outputs.nextStrict }}
+#          name: ${{ steps.semver.outputs.nextStrict }}
+#          body: ${{ steps.changelog.outputs.changelog }}
+#          token: ${{ github.token }}
+
+
 #
 #      - name: Create Release ${{ steps.semver.outputs.nextStrict }}
 #        uses: ncipollo/release-action@v1.12.0
