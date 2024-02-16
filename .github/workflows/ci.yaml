@@ -152,7 +152,7 @@ jobs:
         shell: pwsh
         run: |
           $diff = git diff --name-only HEAD^ HEAD
-          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$ -or $_ -match '^.github/'}
+          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '^.github/' -or $_ -match '.md$'}
           
           if ($docs -eq $null){
                $hasOnlyDocs = $false
