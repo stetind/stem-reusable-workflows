@@ -156,8 +156,14 @@ jobs:
           
           if ($docs -eq $null){
                $hasOnlyDocs = $false
-          }else{
-               $hasOnlyDocs = $diff -eq $docs
+          }
+          else{
+              if($diff -eq $docs){
+                $hasOnlyDocs = $true
+              }
+              else{
+                $hasOnlyDocs = $false
+              }
           }
           
           echo "diff=$diff" >> $env:GITHUB_OUTPUT
