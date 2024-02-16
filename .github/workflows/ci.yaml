@@ -137,8 +137,6 @@ jobs:
   check-changed-files:
     runs-on: 'ubuntu-latest'
     outputs:
-      nullable: ${{ steps.check_file_changed.outputs.nullable }}
-      check: ${{ steps.check_file_changed.outputs.check }}
       diff: ${{ steps.check_file_changed.outputs.diff }}
       docs: ${{ steps.check_file_changed.outputs.docs }}
       has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
@@ -160,7 +158,7 @@ jobs:
                $hasOnlyDocs = $false
           }
           else{
-              if($diff.ToString() -eq $docs.ToString()){
+              if($diff -eq $docs){
                 $hasOnlyDocs = $true
               }
               else{
@@ -168,11 +166,6 @@ jobs:
               }
           }
           
-          $nullable = $diff.ToString()
-          $check = $docs.ToString()
-
-          echo "nullable=$nullable" >> $env:GITHUB_OUTPUT
-          echo "check=$check" >> $env:GITHUB_OUTPUT
           echo "diff=$diff" >> $env:GITHUB_OUTPUT
           echo "docs=$docs" >> $env:GITHUB_OUTPUT
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
@@ -184,10 +177,6 @@ jobs:
     needs: check-changed-files
 #    if: needs.check-changed-files.outputs.has_only_docs == 'False'
     steps:
-      - name: Print 1
-        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.nullable}}"
-      - name: Print 2
-        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.check}}"
       - name: Print 3
         run: echo "Files which are changed are ${{needs.check-changed-files.outputs.diff}}"
       - name: Print 4
