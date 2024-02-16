@@ -161,8 +161,8 @@ jobs:
                $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
           }
           
-          $nullable = $docs -eq $null
-          $check = $docs.ToString() -eq $diff.ToString()
+          $nullable = $diff.ToString()
+          $check = $docs.ToString()
 
           echo "nullable=$nullable" >> $env:GITHUB_OUTPUT
           echo "check=$check" >> $env:GITHUB_OUTPUT
