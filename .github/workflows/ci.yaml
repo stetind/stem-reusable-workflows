@@ -158,7 +158,7 @@ jobs:
                $hasOnlyDocs = $false
           }
           else{
-              if($diff -eq $docs){
+              if($diff.ToString() -eq $docs.ToString()){
                 $hasOnlyDocs = $true
               }
               else{
