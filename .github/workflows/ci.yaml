@@ -158,12 +158,8 @@ jobs:
                $hasOnlyDocs = $false
           }
           else{
-              if($diff.ToString() -eq $docs.ToString()){
-                $hasOnlyDocs = $true
-              }
-              else{
-                $hasOnlyDocs = $false
-              }
+              $ComparisonResult = Compare-Object -ReferenceObject $diff -DifferenceObject $docs
+              $hasOnlyDocs = $comparisonResult -eq $null
           }
           
           echo "diff=$diff" >> $env:GITHUB_OUTPUT
