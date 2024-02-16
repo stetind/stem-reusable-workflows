@@ -162,7 +162,7 @@ jobs:
           }
           
           $nullable = $docs -eq $null
-          $check = $diff.ToString() -eq $docs.ToString()
+          $check = $docs.ToString() -eq $diff.ToString()
 
           echo "nullable=$nullable" >> $env:GITHUB_OUTPUT
           echo "check=$check" >> $env:GITHUB_OUTPUT
