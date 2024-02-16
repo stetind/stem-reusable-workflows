@@ -151,8 +151,12 @@ jobs:
         run: |
           $diff = git diff --name-only HEAD^ HEAD
           $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
-          $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
-
+          if ($docs -eq $null){
+               $hasOnlyDocs = $false
+          }else{
+               $hasOnlyDocs = $diff.ToString() -eq $docs.ToString()
+          }
+          
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
 
   test:
