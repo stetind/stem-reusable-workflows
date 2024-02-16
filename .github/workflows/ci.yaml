@@ -156,13 +156,16 @@ jobs:
           $diff = git diff --name-only HEAD^ HEAD
           $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
           
-          $hasOnlyDocs = $true
-          
           if ($docs -eq $null){
                $hasOnlyDocs = $false
           }
-          if( $docs.ToString() -eq $diff.ToString()){
-               $hasOnlyDocs = $false
+          else{
+              if($diff.ToString() -eq $docs.ToString()){
+                $hasOnlyDocs = $true
+              }
+              else{
+                $hasOnlyDocs = $false
+              }
           }
           
           $nullable = $diff.ToString()
