@@ -137,6 +137,10 @@ jobs:
   check-changed-files:
     runs-on: 'ubuntu-latest'
     outputs:
+      nullable: ${{ steps.check_file_changed.outputs.nullable }}
+      check: ${{ steps.check_file_changed.outputs.check }}
+      diff: ${{ steps.check_file_changed.outputs.diff }}
+      docs: ${{ steps.check_file_changed.outputs.docs }}
       has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
     steps:
       - name: 🛫 Checkout
@@ -159,13 +163,11 @@ jobs:
           
           $nullable = $docs -eq $null
           $check = $diff.ToString() -eq $docs.ToString()
-          
-          Write-Host "::set-output name=nullable::$nullable"          
-          Write-Host "::set-output name=check::$check"          
-          Write-Host "::set-output name=diff::$diff"          
-          Write-Host "::set-output name=docs::$docs"          
-          Write-Host "::set-output name=has_only_docs::$hasOnlyDocs"    
-          
+
+          echo "nullable=$nullable" >> $env:GITHUB_OUTPUT
+          echo "check=$check" >> $env:GITHUB_OUTPUT
+          echo "diff=$diff" >> $env:GITHUB_OUTPUT
+          echo "docs=$docs" >> $env:GITHUB_OUTPUT
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
 
   test:
@@ -173,15 +175,24 @@ jobs:
 #    runs-on: ${{ inputs.testing-runner }}
     runs-on: ubuntu-latest
     needs: check-changed-files
-    if: needs.check-changed-files.outputs.has_only_docs == 'False'
+#    if: needs.check-changed-files.outputs.has_only_docs == 'False'
     steps:
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
-          coverage: xdebug
-
+      - name: Print 1
+        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.nullable}}"
+      - name: Print 2
+        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.check}}"
+      - name: Print 3
+        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.diff}}"
+      - name: Print 4
+        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.docs}}"
+      - name: Print 5
+        run: echo "Files which are changed are ${{needs.check-changed-files.outputs.has_only_docs}}"
+#      - name: 🔨 Setup php
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ env.PHP_VERSION }}
+#          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
+#          coverage: xdebug
 #      - name: 🛫 Checkout
 #        uses: actions/checkout@v3
 #
