@@ -184,7 +184,7 @@ jobs:
         run: echo "Docs which are changed are ${{needs.check-changed-files.outputs.docs}}"
       - name: Print 3
         run: echo "Files are equals ${{needs.check-changed-files.outputs.has_only_docs}}"
-      - name: Print 4
+#      - name: Print 4
 #        run: echo "Files type ${{needs.check-changed-files.outputs.diff_get_type}}"
 #      - name: Print 5
 #        run: echo "Docs type ${{needs.check-changed-files.outputs.docs_get_type}}"
