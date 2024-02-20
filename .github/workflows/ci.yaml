@@ -165,10 +165,10 @@ jobs:
           else{
               $ComparisonResult = Compare-Object -ReferenceObject $diff -DifferenceObject $docs
               if( $comparisonResult -eq $null){
-                 $hasOnlyDocs = $false
+                 $hasOnlyDocs = $true
               }
               else{
-                $hasOnlyDocs = $true
+                $hasOnlyDocs = $false
               }
           }
           
