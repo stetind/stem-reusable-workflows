@@ -140,8 +140,6 @@ jobs:
       diff: ${{ steps.check_file_changed.outputs.diff }}
       docs: ${{ steps.check_file_changed.outputs.docs }}
       has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
-      diff_get_type: ${{ steps.check_file_changed.outputs.diff_get_type }}
-      docs_get_type: ${{ steps.check_file_changed.outputs.docs_get_type }}
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v3
@@ -154,10 +152,7 @@ jobs:
         shell: pwsh
         run: |
           $diff = git diff --name-only HEAD^ HEAD
-          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
-          
-          $a = $diff.GetType()
-          $b = $docs.GetType()
+          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '^.github/' -or $_ -match '.md$'}
           
           if ($docs -eq $null){
                $hasOnlyDocs = $false
@@ -175,8 +170,6 @@ jobs:
           echo "diff=$diff" >> $env:GITHUB_OUTPUT
           echo "docs=$docs" >> $env:GITHUB_OUTPUT
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
-          echo "diff_get_type=$a" >> $env:GITHUB_OUTPUT
-          echo "docs_get_type=$b" >> $env:GITHUB_OUTPUT
 
   test:
     name: PHPUnit
@@ -192,9 +185,9 @@ jobs:
       - name: Print 3
         run: echo "Files are equals ${{needs.check-changed-files.outputs.has_only_docs}}"
       - name: Print 4
-        run: echo "Files type ${{needs.check-changed-files.outputs.diff_get_type}}"
-      - name: Print 5
-        run: echo "Docs type ${{needs.check-changed-files.outputs.docs_get_type}}"
+#        run: echo "Files type ${{needs.check-changed-files.outputs.diff_get_type}}"
+#      - name: Print 5
+#        run: echo "Docs type ${{needs.check-changed-files.outputs.docs_get_type}}"
 #      - name: 🔨 Setup php
 #        uses: shivammathur/setup-php@v2
 #        with:
