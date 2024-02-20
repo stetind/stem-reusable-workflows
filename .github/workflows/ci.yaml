@@ -149,20 +149,13 @@ jobs:
         id: check_file_changed
         shell: pwsh
         run: |
-          $diff = git diff --name-only HEAD^ HEAD
-          $docs = $diff | Where-Object { $_ -match '^docs/' -or $_ -match '^src/Swagger/' -or $_ -match '.md$'}
+          $diff = git diff --name-only HEAD^ HEAD ':!src/Swagger' ':!docs' ':!README.md'
           
-          if ($docs -eq $null){
-               $hasOnlyDocs = $false
+          if ($diff -eq $null){
+               $hasOnlyDocs = $true
           }
           else{
-              $ComparisonResult = Compare-Object -ReferenceObject $diff -DifferenceObject $docs
-              if( $comparisonResult -eq $null){
-                 $hasOnlyDocs = $true
-              }
-              else{
-                $hasOnlyDocs = $false
-              }
+            $hasOnlyDocs = $false
           }
           
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
@@ -172,7 +165,7 @@ jobs:
     runs-on: ${{ inputs.testing-runner }}
 #    runs-on: ubuntu-latest
     needs: check-changed-files
-    if: needs.check-changed-files.outputs.has_only_docs == 'False'
+    if: needs.check-changed-files.outputs.has_only_docs == 'True'
     steps:
       - name: 🔨 Setup php
         uses: shivammathur/setup-php@v2
