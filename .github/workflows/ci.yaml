@@ -137,8 +137,6 @@ jobs:
   check-changed-files:
     runs-on: 'ubuntu-latest'
     outputs:
-      diff: ${{ steps.check_file_changed.outputs.diff }}
-      docs: ${{ steps.check_file_changed.outputs.docs }}
       has_only_docs: ${{ steps.check_file_changed.outputs.has_only_docs }}
     steps:
       - name: 🛫 Checkout
@@ -167,8 +165,6 @@ jobs:
               }
           }
           
-          echo "diff=$diff" >> $env:GITHUB_OUTPUT
-          echo "docs=$docs" >> $env:GITHUB_OUTPUT
           echo "has_only_docs=$hasOnlyDocs" >> $env:GITHUB_OUTPUT
 
   test:
@@ -184,6 +180,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
           coverage: xdebug
+
       - name: 🛫 Checkout
         uses: actions/checkout@v3
 
