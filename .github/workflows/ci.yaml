@@ -149,7 +149,7 @@ jobs:
         id: check_file_changed
         shell: pwsh
         run: |
-          $diff = git diff --name-only HEAD^ HEAD ':!src/Swagger' ':!docs' ':!README.md'
+          $diff = git diff --name-only HEAD^ HEAD ':!src/Swagger' ':!docs' ':!README.md' ':!.github'
           
           if ($diff -eq $null){
                $hasOnlyDocs = $true
