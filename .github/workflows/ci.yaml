@@ -144,7 +144,7 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
-          coverage: xdebug
+          coverage: pcov
 
       - name: 🛫 Checkout
         uses: actions/checkout@v4
