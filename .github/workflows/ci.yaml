@@ -18,7 +18,8 @@ env:
 jobs:
   duplication-check:
     name: Code duplication check
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    container: ubuntu:latest
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
@@ -117,7 +118,8 @@ jobs:
 
   security-check:
     name: Vulnerability Check
-    runs-on: ubuntu-latest # be careful, we are using google-chrome, that pre-exists on ubuntu:20. Ubuntu 22 doesn't have it as default
+    runs-on: self-hosted
+    container: ubuntu:latest
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
