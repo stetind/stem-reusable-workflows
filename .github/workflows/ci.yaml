@@ -35,15 +35,11 @@ jobs:
 
   pint:
     name: Laravel Pint Linting
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    container: industrialists/php83-pcov:1.0.0
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
@@ -72,15 +68,11 @@ jobs:
 
   analyze:
     name: PHPStan
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    container: industrialists/php83-pcov:1.0.0
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
@@ -94,15 +86,11 @@ jobs:
 
   arch-test:
     name: Architecture Test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    container: industrialists/php83-pcov:1.0.0
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
 
       - name: 🧙 Configure Composer
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
@@ -137,17 +125,10 @@ jobs:
           disable-exit-code: 1
 
   test:
-    name: PHPUnit
-    runs-on: ${{ inputs.testing-runner }}
-#    runs-on: ubuntu-latest
+    name: 🔨 PHPUnit
+    runs-on: self-hosted
+    container: industrialists/php83-pcov:1.0.0
     steps:
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
-          coverage: pcov
-
       - name: 🛫 Checkout
         uses: actions/checkout@v4
 
