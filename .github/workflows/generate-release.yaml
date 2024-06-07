@@ -5,8 +5,7 @@ on:
 
 jobs:
   drafting-a-new-release:
-    runs-on: self-hosted
-    container: ubuntu:latest
+    runs-on: ubuntu:latest
     name: 📖 Generate Release
     permissions:
       contents: write
