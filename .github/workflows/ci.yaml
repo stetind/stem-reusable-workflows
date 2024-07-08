@@ -74,12 +74,8 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
 
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-      - name: 🧙 Install Dependencies
-        uses: ramsey/composer-install@v3
-        #        https://github.com/sebastianbergmann/phpcpd/blob/21158aed508ffa2480b90f2af93724e3355c703f/.github/workflows/ci.yml#L58
+      - name: 🧙 Configure Composer & Install Dependencies
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
       - name: 🔧 Run analyzer
         run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
@@ -92,11 +88,8 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
 
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-      - name: 🧙 Install Dependencies
-        uses: ramsey/composer-install@v3
+      - name: 🧙 Configure Composer & Install Dependencies
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
       - name: 🚓 Run test
         run: |
@@ -132,11 +125,14 @@ jobs:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
 
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+      - name: 🧙 Configure Composer & Install Dependencies
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
-      - name: 🧙 Install Dependencies
-        uses: ramsey/composer-install@v3
+#      - name: 🧙 Configure Composer
+#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
+#
+#      - name: 🧙 Install Dependencies
+#        uses: ramsey/composer-install@v3
 
       - name: 🔧 Execute Unit Tests
         run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
