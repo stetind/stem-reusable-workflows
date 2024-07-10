@@ -36,7 +36,7 @@ jobs:
   pint:
     name: Laravel Pint Linting
     runs-on: self-hosted
-    container: industrialists/php83-pcov:1.0.0
+    container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
   analyze:
     name: PHPStan
     runs-on: self-hosted
-    container: industrialists/php83-pcov:1.0.0
+    container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
   arch-test:
     name: Architecture Test
     runs-on: self-hosted
-    container: industrialists/php83-pcov:1.0.0
+    container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
@@ -120,7 +120,7 @@ jobs:
   test:
     name: 🔨 PHPUnit
     runs-on: self-hosted
-    container: industrialists/php83-pcov:1.0.0
+    container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
