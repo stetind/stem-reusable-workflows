@@ -133,6 +133,23 @@ jobs:
 #
 #      - name: 🧙 Install Dependencies
 #        uses: ramsey/composer-install@v3
+      - name: 🔧 Prepare environment variables
+        run: |
+          # Get secrets and environment variables as JSON
+          secrets_json=$(echo '${{ toJson(secrets) }}')
+          vars_json=$(echo '${{ toJson(vars) }}')
+
+          # Combine them into a single JSON object (fixed quoting)
+          all_vars_json=$(echo $secrets_json $vars_json | jq -s add)
+
+          # Convert JSON object back to key-value pairs
+          all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
+
+          # Filter vars prefixed by `STEM_`, and append to file
+          filtered_vars=$(echo "$all_vars" | grep '^STEM__')
+          filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
+
+          echo $filtered_vars_no_prefix > .env
 
       - name: 🔧 Execute Unit Tests
         run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
