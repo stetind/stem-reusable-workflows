@@ -1,0 +1,35 @@
+name: Inject Environment Variables
+description: Inject Environment Variables to a job step
+
+inputs:
+  prefix-to-filter:
+    description: "In order to harden our variables injection, we need to use at least a specific prefix, to filter only which we need"
+    required: true
+    default: STEM__
+  secrets-context:
+    description: "Must get as input the `{{ toJson(secrets) }}`, as it is not available in this scope"
+    required: true
+  vars-context:
+    description: "Must get as input the `{{ toJson(vars) }}`, as it is not available in this scope"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: 🔧 Prepare environment variables
+      shell: bash
+      run: |
+        # Get secrets and environment variables as JSON
+        secrets_json=$(echo '${{ inputs.secrets-context }}')
+        vars_json=$(echo '${{ inputs.vars-context }}')
+
+        # Combine them into a single JSON object (fixed quoting)
+        all_vars_json=$(echo $secrets_json $vars_json | jq -s add)
+
+        # Convert JSON object back to key-value pairs
+        all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
+
+        # Filter vars prefixed by `STEM_`, and append to file
+        filtered_vars=$(echo "$all_vars" | grep '^STEM__')
+        filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
+
+        echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
