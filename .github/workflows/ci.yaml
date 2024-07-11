@@ -3,49 +3,22 @@ name: CI
 on:
   workflow_call:
     inputs:
-      testing-runner:
-        description: 'In case of large testing process, we can define a different runner, only for PhpUnit tests'
+      runner:
+        description: 'Choose a runner, only for PhpUnit tests'
         required: false
+        default: self-hosted
         type: string
-        default: ubuntu-latest
-    secrets:
-      COMPOSER_ACCESS_TOKEN:
-        required: true
-
-env:
-  PHP_VERSION: 8.3
-
 jobs:
-  duplication-check:
-    name: Code duplication check
-    runs-on: self-hosted
-    container: ubuntu:latest
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🔨 Setup php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          tools: phpcpd
-
-      - name: 🔧 Check code duplication in "src" directory
-        run: phpcpd src/ --min-lines=6
-
   pint:
     name: Laravel Pint Linting
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runner }}
     container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
         uses: actions/checkout@v4
 
-      - name: 🧙 Configure Composer
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-
-      - name: 🧙 Install Dependencies
-        uses: ramsey/composer-install@v3
+      - name: 🧙 Configure Composer & Install Dependencies
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
       - name: 🔧  Run linter
         run: vendor/bin/pint -vv --config ruleset-pint.json --test
@@ -68,7 +41,7 @@ jobs:
 
   analyze:
     name: PHPStan
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runner }}
     container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
@@ -82,7 +55,7 @@ jobs:
 
   arch-test:
     name: Architecture Test
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runner }}
     container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
@@ -99,7 +72,7 @@ jobs:
 
   security-check:
     name: Vulnerability Check
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runner }}
     container: ubuntu:latest
     steps:
       - name: 🛫 Checkout
@@ -119,7 +92,7 @@ jobs:
 
   test:
     name: 🔨 PHPUnit
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runner }}
     container: industrialists/php83-pcov:1.0.1
     steps:
       - name: 🛫 Checkout
@@ -128,28 +101,11 @@ jobs:
       - name: 🧙 Configure Composer & Install Dependencies
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
-#      - name: 🧙 Configure Composer
-#        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}"
-#
-#      - name: 🧙 Install Dependencies
-#        uses: ramsey/composer-install@v3
-      - name: 🔧 Prepare environment variables
-        run: |
-          # Get secrets and environment variables as JSON
-          secrets_json=$(echo '${{ toJson(secrets) }}')
-          vars_json=$(echo '${{ toJson(vars) }}')
-
-          # Combine them into a single JSON object (fixed quoting)
-          all_vars_json=$(echo $secrets_json $vars_json | jq -s add)
-
-          # Convert JSON object back to key-value pairs
-          all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
-
-          # Filter vars prefixed by `STEM_`, and append to file
-          filtered_vars=$(echo "$all_vars" | grep '^STEM__')
-          filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
-
-          echo $filtered_vars_no_prefix > .env
+      - name: Inject Environment Variables
+        uses: stetind/stem-reusable-workflows/.github/composite/inject-variables@main
+        with:
+          secrets-context: ${{ toJson(secrets) }}
+          vars-context: ${{ toJson(vars) }}
 
       - name: 🔧 Execute Unit Tests
         run: vendor/bin/testbench package:test --env=true --parallel --coverage --min=90 --configuration=phpunit.xml
