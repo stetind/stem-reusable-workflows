@@ -27,10 +27,9 @@ runs:
 
         # Convert JSON object back to key-value pairs
         all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
-        echo '1'
+
         # Filter vars prefixed by `STEM_`, and append to file
         filtered_vars=$(echo "$all_vars" | { grep '^STEM__' || :; })
-        echo '2'
         filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
-        echo "$filtered_vars_no_prefix"
-#        echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
+
+        echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
