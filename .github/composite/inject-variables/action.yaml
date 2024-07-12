@@ -29,7 +29,7 @@ runs:
         all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
         echo '1'
         # Filter vars prefixed by `STEM_`, and append to file
-        filtered_vars=$(echo "$all_vars" | grep -s '^STEM__')
+        filtered_vars=$(echo "$all_vars" | { grep '^STEM__' || :; })
         echo '2'
         filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
         echo "$filtered_vars_no_prefix"
