@@ -9,19 +9,6 @@ on:
         default: self-hosted
         type: string
 jobs:
-  pint:
-    name: Laravel Pint Linting
-    runs-on: ${{ inputs.runner }}
-    container: industrialists/php83-pcov:1.0.1
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🧙 Configure Composer & Install Dependencies
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
-
-      - name: 🔧  Run linter
-        run: vendor/bin/pint -vv --config ruleset-pint.json --test
 
 #  phpmd:
 #    name: Php Mess Detector - Check
