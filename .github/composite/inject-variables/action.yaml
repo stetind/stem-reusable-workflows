@@ -33,5 +33,8 @@ runs:
         filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
 
 
-        [ -z $filtered_vars_no_prefix ] || echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
+        if  ! $filtered_vars_no_prefix
+        then
+         echo $filtered_vars_no_prefix:-" " >> "$GITHUB_ENV"
+        fi
 
