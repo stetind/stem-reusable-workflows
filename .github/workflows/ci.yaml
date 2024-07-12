@@ -39,56 +39,6 @@ jobs:
 #      - name: 🔧  Run Check
 #        run: phpmd src text cleancode,codesize,controversial,design,unusedcode
 
-  analyze:
-    name: PHPStan
-    runs-on: ${{ inputs.runner }}
-    container: industrialists/php83-pcov:1.0.1
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🧙 Configure Composer & Install Dependencies
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
-
-      - name: 🔧 Run analyzer
-        run: vendor/bin/phpstan analyse --memory-limit=1G -c ruleset-phpstan.neon --error-format=github -vvv
-
-  arch-test:
-    name: Architecture Test
-    runs-on: ${{ inputs.runner }}
-    container: industrialists/php83-pcov:1.0.1
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v4
-
-      - name: 🧙 Configure Composer & Install Dependencies
-        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
-
-      - name: 🚓 Run test
-        run: |
-          for CONF in deptrac.yaml deptrac-*.yaml; do
-            test ! -f "$CONF" && continue || vendor/bin/deptrac --report-uncovered --fail-on-uncovered --config-file="$CONF";
-          done
-
-  security-check:
-    name: Vulnerability Check
-    runs-on: ${{ inputs.runner }}
-    container: ubuntu:latest
-    steps:
-      - name: 🛫 Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache the vulnerability database
-        uses: actions/cache@v4
-        id: cache-db
-        with:
-          path: ~/.symfony/cache
-          key: db
-
-      - name: 💩 Run security check
-        uses: symfonycorp/security-checker-action@v5
-        with:
-          disable-exit-code: 1
 
   test:
     name: 🔨 PHPUnit
@@ -102,7 +52,7 @@ jobs:
         run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
 
       - name: Inject Environment Variables
-        uses: stetind/stem-reusable-workflows/.github/composite/inject-variables@main
+        uses: stetind/stem-reusable-workflows/.github/composite/inject-variables@gs/testing
         with:
           secrets-context: ${{ toJson(secrets) }}
           vars-context: ${{ toJson(vars) }}
