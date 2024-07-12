@@ -32,6 +32,6 @@ runs:
         echo '2'
         filtered_vars=$(echo "$all_vars" | grep -s '^STEM__')
         echo '3'
-        filtered_vars_no_prefix=$(echo "$all_vars" | sed -n 's/^STEM__//')
+        filtered_vars_no_prefix=$(echo "$filtered_vars" | sed -n 's/^STEM__//')
         echo "$filtered_vars_no_prefix"
 #        echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
