@@ -28,7 +28,7 @@ runs:
         # Convert JSON object back to key-value pairs
         all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
 
-        if  $all_vars
+        if -z  $all_vars
         then
 
             # Filter vars prefixed by `STEM_`, and append to file
