@@ -32,4 +32,7 @@ runs:
         filtered_vars=$(echo "$all_vars" | grep '^STEM__')
         filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
 
-        echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
+
+        if [ $1 -gt 100 ] then
+           echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
+        fi
