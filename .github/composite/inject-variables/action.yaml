@@ -29,7 +29,7 @@ runs:
         all_vars=$(echo "$all_vars_json" | jq -r '. | to_entries | .[] | "\(.key)=\(.value)"')
 
         # Filter vars prefixed by `STEM_`, and append to file
-        filtered_vars=$(echo "$all_vars:-''" | grep '^STEM__')
+#        filtered_vars=$(echo "$all_vars" | grep '^STEM__')
         filtered_vars_no_prefix=$(echo "$filtered_vars" | sed 's/^STEM__//')
 
         echo $filtered_vars_no_prefix >> "$GITHUB_ENV"
