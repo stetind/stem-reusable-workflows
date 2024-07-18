@@ -20,6 +20,8 @@ jobs:
           TAG="0.0.0"
           if [ $(git tag -l "${TAG}") ]; then
             gh release create 0.0.0
+            echo "Creating ${TAG} tag"
+            echo "::notice::Creating ${TAG} tag"
           fi
         env:
           GH_TOKEN: ${{ github.token }}
@@ -30,6 +32,7 @@ jobs:
           gh release list --limit 10 |  while read -a line && [ ${line[1]} == Draft ] ; do
              echo "deleting ${line[0]}" ;
              gh release delete -y ${line[0]} ;
+             echo "Deleting ${line[0]} release"
           done;
         env:
           GH_TOKEN: ${{ github.token }}
