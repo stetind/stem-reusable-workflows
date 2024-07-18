@@ -18,6 +18,8 @@ jobs:
       - name: Check or create first tag #we need to initialize tags, in order to proceed to the next job
         run: |
           TAG="0.0.0"
+          echo "::notice::Creating ${TAG} tag"
+          echo "::notice::branch "${{github.ref}}
           if [ $(git tag -l "${TAG}") ]; then
             gh release create 0.0.0
             echo "Creating ${TAG} tag"
