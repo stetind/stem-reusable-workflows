@@ -13,6 +13,7 @@ jobs:
   drafting-a-new-release:
     runs-on: ubuntu-latest
     name: 📖 Generate Release
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write
 
