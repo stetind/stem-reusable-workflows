@@ -7,12 +7,7 @@ run-name: >-
 
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types:
-      - completed
-    branches: [main, dev-v*]
-
+  workflow_call:
 
 jobs:
   drafting-a-new-release:
