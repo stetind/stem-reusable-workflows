@@ -90,6 +90,29 @@ jobs:
         with:
           disable-exit-code: 1
 
+
+  rector:
+    name: Re
+    runs-on: ${{ inputs.runner }}
+    container: industrialists/php83-pcov:1.0.1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rector Cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/rector
+          key: ${{ runner.os }}-rector-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-rector-
+
+      - run: mkdir -p /tmp/rector
+
+      - name: 🧙 Configure Composer & Install Dependencies
+        run: composer config --auth github-oauth.github.com "${{ secrets.COMPOSER_ACCESS_TOKEN }}" && composer i
+
+      - name: Rector Dry Run
+        run: composer stem:rector --dry
+
   test:
     name: 🔨 PHPUnit
     runs-on: ${{ inputs.runner }}
